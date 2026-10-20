@@ -179,7 +179,7 @@ h1 {
   position: absolute; pointer-events: none; z-index: 2;
   padding: 6px 9px; border-radius: 6px; background: var(--tip-bg); color: var(--tip-fg);
   font: 400 11.5px/1.45 var(--font-data); white-space: nowrap;
-  transform: translate(12px, -50%);
+  transform: translate(18px, -50%);
 }
 .notice {
   position: absolute; left: 12px; bottom: 12px; right: 12px;
@@ -328,7 +328,7 @@ const META = [
   { name: "Composite Griewank-Rosenbrock", group: 4, pills: [["mod", "Highly multimodal"], ["sep", "Non-separable"], ["loc", "Bumpy"], ["glob", "Adequate global structure"]],
     text: "Griewank's ripples on top of Rosenbrock's valley: the large-scale shape is a valley, the small-scale shape is bumpy." },
   { name: "Schwefel x·sin(x)", group: 5, pills: [["mod", "Multimodal"], ["sep", "Non-separable"], ["loc", "Smooth"], ["glob", "Deceptive"], ["glob", "Weak global structure"]],
-    text: "The most prominent 2<sup>D</sup> minima sit near the corners of the domain, far from one another, which misleads local search." },
+    text: "Outside a box the function is a steep penalty; inside it, the most prominent 2<sup>D</sup> minima sit near the box corners, far from one another, which misleads local search." },
   { name: "Gallagher's 101 Peaks", group: 5, pills: [["mod", "Multimodal · 101 peaks"], ["sep", "Non-separable"], ["loc", "Smooth basins"], ["glob", "Weak global structure"], ["cond", "Conditioning ≈ 30"]],
     text: "101 Gaussian peaks with random positions and heights: there is no global trend to follow." },
   { name: "Gallagher's 21 Peaks", group: 5, pills: [["mod", "Multimodal · 21 peaks"], ["sep", "Non-separable"], ["loc", "Smooth basins"], ["glob", "Weak global structure"], ["cond", "Conditioning ≈ 1000"]],

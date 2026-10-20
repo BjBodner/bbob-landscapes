@@ -85,6 +85,7 @@ const INJECT = String.raw`(() => {
     css.textContent = ${"`"}
       #demo-cursor { position: fixed; left: 0; top: 0; width: 30px; height: 30px; z-index: 99999; pointer-events: none;
         margin: -3px 0 0 -4px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); }
+      .tip { transform: translate(34px, -50%) !important; }
       #demo-ring { position: fixed; z-index: 99998; pointer-events: none; border-radius: 50%;
         border: 3px solid var(--accent); transform: translate(-50%, -50%); }
       #demo-cap { position: fixed; z-index: 99997; transform: translate(-50%, -100%); pointer-events: none;
@@ -178,7 +179,7 @@ try {
 async function recordVideo(cdp) {
   const file = join(OUT, "bbob-landscapes-demo.mp4");
   const ffmpeg = spawn("ffmpeg", ["-y", "-loglevel", "error", "-f", "image2pipe", "-framerate", String(FPS),
-    "-c:v", "mjpeg", "-i", "-", "-c:v", "libx264", "-preset", "slow", "-crf", "20", "-pix_fmt", "yuv420p",
+    "-c:v", "mjpeg", "-i", "-", "-vf", "scale=in_range=pc:out_range=tv,format=yuv420p", "-c:v", "libx264", "-preset", "slow", "-crf", "20",
     "-movflags", "+faststart", file], { stdio: ["pipe", "inherit", "inherit"] });
   const done = new Promise(res => ffmpeg.on("close", res));
 
@@ -291,7 +292,7 @@ async function recordVideo(cdp) {
     await hold(0.95);
   }
   await scrollIndex(400, 0.5);
-  for (const k of [19, 20, 23]) {
+  for (const k of [19, 23, 20]) {
     await moveTo(fn(k), 0.45);
     await click();
     await hold(0.95);
