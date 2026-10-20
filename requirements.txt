@@ -1,0 +1,2 @@
+cocoex>=2.6
+numpy
