@@ -31,7 +31,8 @@ python build.py --instance 7    # another bbob instance
 * **How AMM runs here.** AMM plans for the budget it is told, so the budget decides how quickly it can finish an easy function.
   * For this demo, that budget was tuned for each function. `race/budget_sweep.py` ran the unchanged c46 preset with budgets of 10 to 1000 evaluations, restarted with the same budget until the race's 2000 were spent.
   * `race/sweep_report.py` then kept, for each function, the setting with the most wins on the shown races (`race/tuning/per_function_budget.json`, matrix in `race/tuning/sweep_matrix.md`).
-  * With these budgets AMM wins 79 of the 120 races against SLSQP and HCMA, and 62 against all five competitors.
+  * With these budgets AMM wins 79 of the 120 races against SLSQP and HCMA, and 62 against all five competitors, every optimizer running once.
+  * On top of that, each AMM run shown is the best of 100 random seeds (`python race/record.py --only amm --best-of 100`), while every other optimizer ran once (HCMA: its single archived run). With that selection AMM wins 108 of the 120 races against SLSQP and HCMA. If SLSQP is also given its best of 100 seeds, SLSQP wins 76 and AMM 44.
   * One budget for every function (B = 600, chosen on instances 6-15) would win 44 and 32. Per-function budgets chosen on instances 6-15 win 57 and 35 on the shown races.
 * **On the landscape.** Each × is one evaluation. The last 10 of each optimizer are shown, fading with age. The ring marks each optimizer's best point so far. It never fades, and it glides to a new point only when a better one is found.
 * **The track.** Each optimizer's best f(x) − f_opt so far, on a log scale from 10 down to the finish line at 10⁻⁸ (COCO's final target).

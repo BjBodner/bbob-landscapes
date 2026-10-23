@@ -263,11 +263,16 @@ CALLS = {
 }
 
 
-def run(name: str, problem, fopt: float, k: int) -> Recorder:
-    """The FT1 restart loop (benchmarks/run_bbob.py, solve_problem) for one optimizer."""
+def run(name: str, problem, fopt: float, k: int, rep: int = 0) -> Recorder:
+    """The FT1 restart loop (benchmarks/run_bbob.py, solve_problem) for one optimizer.
+
+    ``rep`` 0 is the race's original seed; ``rep`` r > 0 adds r to the seed sequence (a new
+    start point and a new optimizer stream).
+    """
     solver = SOLVERS[name](problem.id_function) if name == "amm" else SOLVERS[name]()
     rec = Recorder(problem, fopt, solver.penalty)
-    solver.begin(np.random.SeedSequence([SEED_NAMESPACE, k, problem.id_function, DIM, k]))
+    entropy = [SEED_NAMESPACE, k, problem.id_function, DIM, k] + ([rep] if rep else [])
+    solver.begin(np.random.SeedSequence(entropy))
     restarts = 0
     with open(os.devnull, "w") as sink, contextlib.redirect_stdout(sink), warnings.catch_warnings():
         warnings.simplefilter("ignore")
@@ -429,6 +434,24 @@ def thumbnail(land: dict, size: int = 44) -> str:
     return b64(img)
 
 
+def runs_note(races: list[dict]) -> str:
+    """One line for the page: which optimizers' shown runs were picked from several seeds."""
+    best_of = {}
+    for p in OUT.glob("f*_i*.json"):
+        for n, r in json.loads(p.read_text())["runs"].items():
+            best_of[n] = max(best_of.get(n, 1), r.get("best_of", 1))
+    label = {"amm": "AMM", "slsqp": "SLSQP", "nelder_mead": "Nelder-Mead", "ngopt": "NGOpt", "cma_bipop": "CMA-BIPOP"}
+    picked = [n for n in OPTIMIZERS if n != "hcma" and best_of.get(n, 1) > 1]
+    if not picked:
+        return "Single recorded runs, one per optimizer; an illustration, not a benchmark."
+    once = [label[n] for n in OPTIMIZERS if n != "hcma" and n not in picked]
+    text = (" and ".join(label[n] for n in picked) + f": each run shown is the best of "
+            f"{max(best_of[n] for n in picked)} random seeds")
+    if once:
+        text += "; " + ", ".join(once) + ": one run each"
+    return text + "; HCMA: its single archived run. An illustration, not a benchmark."
+
+
 def stamp_page() -> None:
     """Version race.html's script and style URLs by content, so browsers never keep stale copies."""
     page = ROOT / "race.html"
@@ -457,7 +480,7 @@ def write_index() -> None:
         "x_range": X_RANGE, "log_floor": LOG_FLOOR, "optimizers": OPTIMIZERS,
         "calls": CALLS, "amm_race": {"per_function": {str(f): v for f, v in sorted(RACE_AMM.items())},
                                        "chosen_by": "race/sweep_report.py + race/tuning/per_function_budget.json"},
-        "amm_note": amm_note(), "versions": versions(),
+        "amm_note": amm_note(), "runs_note": runs_note(races), "versions": versions(),
         "seeds": "race (f, k): bbob instance k; SeedSequence([0x41544D, k, f, 2, k]) split into "
                  "start points and optimizer stream, as in the FT1 harness",
         "thumbs": thumbs,
@@ -475,7 +498,7 @@ def verify(count: int) -> None:
         d = json.loads(p.read_text())
         f, k = d["function"], d["instance"]
         problem = bbob(f, k)
-        rec = run(name, problem, round(float(d["landscape"]["f_opt"]), 2), k)
+        rec = run(name, problem, round(float(d["landscape"]["f_opt"]), 2), k, d["runs"][name].get("rep", 0))
         got = encode(rec.xs, np.asarray(rec.values) - round(float(d["landscape"]["f_opt"]), 2))["sha256"]
         ok = got == d["runs"][name]["sha256"]
         print(f"{p.name} {name:12s} {'same' if ok else 'DIFFERENT'}")
@@ -492,6 +515,8 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--verify", type=int, metavar="N", help="re-run N random runs and compare")
     ap.add_argument("--index-only", action="store_true")
     ap.add_argument("--only", help="re-record only these optimizers (comma-separated) into the existing files")
+    ap.add_argument("--best-of", type=int, default=1,
+                    help="with --only: run each optimizer with this many seeds and keep its best run")
     a = ap.parse_args(argv)
     OUT.mkdir(parents=True, exist_ok=True)
     if a.verify:
@@ -504,7 +529,8 @@ def main(argv: list[str] | None = None) -> None:
         procs = [subprocess.Popen([sys.executable, __file__, "--jobs", "1", "--instances", a.instances,
                                    "--functions", ",".join(map(str, c))]
                                   + (["--hcma", str(a.hcma)] if a.hcma else [])
-                                  + (["--only", a.only] if a.only else []))
+                                  + (["--only", a.only] if a.only else [])
+                                  + (["--best-of", str(a.best_of)] if a.best_of > 1 else []))
                  for c in chunks if c]
         if any(p.wait() for p in procs):
             raise SystemExit("a worker failed")
@@ -520,8 +546,14 @@ def main(argv: list[str] | None = None) -> None:
                 d = json.loads(path.read_text())
                 problem, fopt = bbob(f, k), round(float(d["landscape"]["f_opt"]), 2)
                 for n in names:
-                    rec = run(n, problem, fopt, k)
-                    d["runs"][n] = encode(rec.xs, np.asarray(rec.values) - fopt)
+                    best = None
+                    for r in range(a.best_of):   # the best run: earliest to the target, else lowest value
+                        rec = run(n, problem, fopt, k, r)
+                        e = encode(rec.xs, np.asarray(rec.values) - fopt)
+                        key = (e["finish"] if e["finish"] is not None else 10**9, e["best"])
+                        if best is None or key < best[0]:
+                            best = (key, e, r)
+                    d["runs"][n] = {**best[1], "rep": best[2], "best_of": a.best_of}
                 path.write_text(json.dumps(d, separators=(",", ":")), encoding="utf-8")
                 print(f"f{f} i{k}: " + " ".join(f"{n}={d['runs'][n]['finish'] or '-'}" for n in names), flush=True)
         if a.jobs == 1 and len(functions) == 24:
