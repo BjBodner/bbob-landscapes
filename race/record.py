@@ -236,6 +236,20 @@ def amm_note() -> str:
             "the best chance of reaching the global optimum, not just the nearest local one.")
 
 
+CALLS = {
+    "amm": "amm_optimizer.minimize(f, x0, budget, rng, config=presets.get('c46'), bounds=(-5, 5)) on the "
+           "budget schedule RACE_AMM (see AMM in race/record.py); "
+           "points clipped to the box with penalty |x - clip(x)|^2",
+    "slsqp": "scipy.optimize.minimize(f, x0, method='SLSQP', bounds=[(-5, 5)] * 2, "
+             "options={'maxiter': budget, 'ftol': 1e-14}), restarted",
+    "nelder_mead": "scipy.optimize.minimize(f, x0, method='Nelder-Mead', "
+                   "options={'maxfev': budget, 'xatol': 1e-10, 'fatol': 1e-10}), restarted",
+    "ngopt": "nevergrad NGOpt(parametrization=Array(init=x0).set_bounds(-5, 5), budget, num_workers=1)",
+    "cma_bipop": "cma.fmin2(f, start, 2.0, {maxfevals: budget, bounds: [-5, 5], seed}, restarts=9, bipop=True)",
+    "hcma": f"COCO data archive {HCMA_ARCHIVE} (Loshchilov 2013), run of instance k; logged samples only",
+}
+
+
 def run(name: str, problem, fopt: float, k: int) -> Recorder:
     """The FT1 restart loop (benchmarks/run_bbob.py, solve_problem) for one optimizer."""
     solver = SOLVERS[name]()

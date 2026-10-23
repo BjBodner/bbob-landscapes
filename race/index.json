@@ -32,7 +32,7 @@
   ],
   "warm": true
  },
- "amm_note": "AMM: the c46 preset run with budgets of 5, 10, 30, 100 \u00d7 D in turn, then the rest, each run starting from the best point so far, so an easy function ends in a short run.",
+ "amm_note": "AMM is budget-aware: it plans for the whole evaluation budget and uses most of it to give itself the best chance of reaching the global optimum, not just the nearest local one.",
  "versions": {
   "amm_optimizer": "0.3.1",
   "amm_config_hash": "2153948ebed51150",
