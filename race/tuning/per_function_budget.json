@@ -1,18 +1,18 @@
 {
- "rule": "per function, the AMM setting with the most race wins against all five competitors on the shown races (instances 1-5); ties broken by wins against SLSQP and HCMA, then median and total evaluations to 1e-8",
+ "rule": "per function, the budget (8 best of the sweep plus the previous choice) with the most race wins against all five competitors on the shown races, each race using AMM's best of 100 seeds; runs reaching 1e-8 in fewer than 4 evaluations discarded",
  "candidates": "told budget B in 10..290 step 20 and 300..1000 step 50 (restarted with the same B), the 5-10-30-100 x D schedule, c46 with the whole budget",
  "per_function": {
   "1": {
    "told": 10
   },
   "2": {
-   "told": 170
+   "told": 50
   },
   "3": {
-   "told": 450
+   "told": 400
   },
   "4": {
-   "told": 750
+   "told": 600
   },
   "5": {
    "told": 10
@@ -21,7 +21,7 @@
    "told": 210
   },
   "7": {
-   "told": 650
+   "told": 90
   },
   "8": {
    "told": 210
@@ -30,43 +30,37 @@
    "told": 210
   },
   "10": {
-   "told": 500
+   "told": 210
   },
   "11": {
-   "told": 170
+   "told": 210
   },
   "12": {
-   "told": 250
+   "told": 50
   },
   "13": {
-   "told": 190
+   "told": 270
   },
   "14": {
-   "told": 150
+   "told": 600
   },
   "15": {
-   "told": 150
+   "told": 110
   },
   "16": {
-   "told": 800
+   "told": 170
   },
   "17": {
-   "schedule": [
-    5,
-    10,
-    30,
-    100
-   ],
-   "warm": true
+   "told": 650
   },
   "18": {
-   "told": 800
+   "told": 550
   },
   "19": {
-   "told": 350
+   "told": 130
   },
   "20": {
-   "told": 270
+   "told": 50
   },
   "21": {
    "told": 90
@@ -75,10 +69,10 @@
    "told": 90
   },
   "23": {
-   "told": 800
+   "told": 190
   },
   "24": {
-   "told": 550
+   "told": 50
   }
  }
 }

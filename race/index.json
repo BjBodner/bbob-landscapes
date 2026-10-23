@@ -29,13 +29,13 @@
     "told": 10
    },
    "2": {
-    "told": 170
+    "told": 50
    },
    "3": {
-    "told": 450
+    "told": 400
    },
    "4": {
-    "told": 750
+    "told": 600
    },
    "5": {
     "told": 10
@@ -44,7 +44,7 @@
     "told": 210
    },
    "7": {
-    "told": 650
+    "told": 90
    },
    "8": {
     "told": 210
@@ -53,43 +53,37 @@
     "told": 210
    },
    "10": {
-    "told": 500
+    "told": 210
    },
    "11": {
-    "told": 170
+    "told": 210
    },
    "12": {
-    "told": 250
+    "told": 50
    },
    "13": {
-    "told": 190
+    "told": 270
    },
    "14": {
-    "told": 150
+    "told": 600
    },
    "15": {
-    "told": 150
+    "told": 110
    },
    "16": {
-    "told": 800
+    "told": 170
    },
    "17": {
-    "schedule": [
-     5,
-     10,
-     30,
-     100
-    ],
-    "warm": true
+    "told": 650
    },
    "18": {
-    "told": 800
+    "told": 550
    },
    "19": {
-    "told": 350
+    "told": 130
    },
    "20": {
-    "told": 270
+    "told": 50
    },
    "21": {
     "told": 90
@@ -98,10 +92,10 @@
     "told": 90
    },
    "23": {
-    "told": 800
+    "told": 190
    },
    "24": {
-    "told": 550
+    "told": 50
    }
   },
   "chosen_by": "race/sweep_report.py + race/tuning/per_function_budget.json"
@@ -258,11 +252,11 @@
   },
   {
    "file": "f2_i1.json",
-   "v": "4a12ca9e8382",
+   "v": "0045f4adf93b",
    "function": 2,
    "instance": 1,
    "finish": {
-    "amm": 52,
+    "amm": 30,
     "slsqp": 53,
     "nelder_mead": 119,
     "ngopt": 1340,
@@ -270,7 +264,7 @@
     "hcma": 270
    },
    "best": {
-    "amm": 5.091e-09,
+    "amm": 5.631e-09,
     "slsqp": 6.105e-09,
     "nelder_mead": 4.185e-09,
     "ngopt": 7.698e-09,
@@ -280,11 +274,11 @@
   },
   {
    "file": "f2_i2.json",
-   "v": "e1af9b0e447f",
+   "v": "2ccaa558b784",
    "function": 2,
    "instance": 2,
    "finish": {
-    "amm": 68,
+    "amm": 32,
     "slsqp": 39,
     "nelder_mead": 122,
     "ngopt": 1362,
@@ -292,7 +286,7 @@
     "hcma": 267
    },
    "best": {
-    "amm": 6.095e-09,
+    "amm": 9.046e-10,
     "slsqp": 1.816e-11,
     "nelder_mead": 2.962e-09,
     "ngopt": 8.91e-09,
@@ -302,11 +296,11 @@
   },
   {
    "file": "f2_i3.json",
-   "v": "7a6909a613e1",
+   "v": "197b89d5bfa3",
    "function": 2,
    "instance": 3,
    "finish": {
-    "amm": 65,
+    "amm": 32,
     "slsqp": 62,
     "nelder_mead": 106,
     "ngopt": 1449,
@@ -314,7 +308,7 @@
     "hcma": 317
    },
    "best": {
-    "amm": 4.759e-09,
+    "amm": 3.496e-12,
     "slsqp": 3.391e-09,
     "nelder_mead": 3.743e-09,
     "ngopt": 6.114e-09,
@@ -324,11 +318,11 @@
   },
   {
    "file": "f2_i4.json",
-   "v": "acedef0672a1",
+   "v": "a6706b6795f3",
    "function": 2,
    "instance": 4,
    "finish": {
-    "amm": 68,
+    "amm": 31,
     "slsqp": 40,
     "nelder_mead": 140,
     "ngopt": 1501,
@@ -336,7 +330,7 @@
     "hcma": 116
    },
    "best": {
-    "amm": 2.898e-09,
+    "amm": 7.53e-09,
     "slsqp": 4.359e-10,
     "nelder_mead": 6.447e-10,
     "ngopt": 4.714e-09,
@@ -346,11 +340,11 @@
   },
   {
    "file": "f2_i5.json",
-   "v": "6b9953068bc2",
+   "v": "9b1e39353329",
    "function": 2,
    "instance": 5,
    "finish": {
-    "amm": 56,
+    "amm": 32,
     "slsqp": 53,
     "nelder_mead": 753,
     "ngopt": 1467,
@@ -358,7 +352,7 @@
     "hcma": 272
    },
    "best": {
-    "amm": 9.101e-09,
+    "amm": 1.828e-09,
     "slsqp": 8.147e-09,
     "nelder_mead": 6.284e-09,
     "ngopt": 2.859e-09,
@@ -456,11 +450,11 @@
   },
   {
    "file": "f3_i5.json",
-   "v": "df14a6494948",
+   "v": "e781e6ec4a7e",
    "function": 3,
    "instance": 5,
    "finish": {
-    "amm": 222,
+    "amm": 212,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -478,11 +472,11 @@
   },
   {
    "file": "f4_i1.json",
-   "v": "adf34be23c58",
+   "v": "5dccd840ca9d",
    "function": 4,
    "instance": 1,
    "finish": {
-    "amm": 623,
+    "amm": 95,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -490,7 +484,7 @@
     "hcma": 986
    },
    "best": {
-    "amm": 8.505e-09,
+    "amm": 2.498e-09,
     "slsqp": 0.995,
     "nelder_mead": 0.995,
     "ngopt": 4.975,
@@ -500,11 +494,11 @@
   },
   {
    "file": "f4_i2.json",
-   "v": "196099b1b7c7",
+   "v": "d29192a98b8c",
    "function": 4,
    "instance": 2,
    "finish": {
-    "amm": 443,
+    "amm": 84,
     "slsqp": 1617,
     "nelder_mead": null,
     "ngopt": null,
@@ -512,7 +506,7 @@
     "hcma": 1028
    },
    "best": {
-    "amm": 6.611e-09,
+    "amm": 9.584e-10,
     "slsqp": 8.761e-11,
     "nelder_mead": 7.96,
     "ngopt": 0.995,
@@ -522,11 +516,11 @@
   },
   {
    "file": "f4_i3.json",
-   "v": "05b060151791",
+   "v": "cd73cdf69748",
    "function": 4,
    "instance": 3,
    "finish": {
-    "amm": 578,
+    "amm": 102,
     "slsqp": 1711,
     "nelder_mead": 1282,
     "ngopt": 1176,
@@ -534,7 +528,7 @@
     "hcma": 1112
    },
    "best": {
-    "amm": 2.504e-09,
+    "amm": 8.681e-09,
     "slsqp": 2.552e-09,
     "nelder_mead": 3.801e-09,
     "ngopt": 6.337e-09,
@@ -544,11 +538,11 @@
   },
   {
    "file": "f4_i4.json",
-   "v": "0fecb34ffe02",
+   "v": "a2670fdd3d1e",
    "function": 4,
    "instance": 4,
    "finish": {
-    "amm": 623,
+    "amm": 195,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -556,7 +550,7 @@
     "hcma": 812
    },
    "best": {
-    "amm": 4.647e-09,
+    "amm": 6.278e-09,
     "slsqp": 1.99,
     "nelder_mead": 12.93,
     "ngopt": 0.5976,
@@ -566,11 +560,11 @@
   },
   {
    "file": "f4_i5.json",
-   "v": "48b2db322a8d",
+   "v": "70f2da98633a",
    "function": 4,
    "instance": 5,
    "finish": {
-    "amm": 618,
+    "amm": 95,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -578,7 +572,7 @@
     "hcma": 719
    },
    "best": {
-    "amm": 5.551e-09,
+    "amm": 9.042e-09,
     "slsqp": 0.995,
     "nelder_mead": 0.995,
     "ngopt": 3.98,
@@ -588,11 +582,11 @@
   },
   {
    "file": "f5_i1.json",
-   "v": "78d78f16daaf",
+   "v": "2fc65724327a",
    "function": 5,
    "instance": 1,
    "finish": {
-    "amm": 1,
+    "amm": 6,
     "slsqp": 13,
     "nelder_mead": 35,
     "ngopt": 1479,
@@ -610,11 +604,11 @@
   },
   {
    "file": "f5_i2.json",
-   "v": "23dd47075a70",
+   "v": "caaf9ce8ac34",
    "function": 5,
    "instance": 2,
    "finish": {
-    "amm": 1,
+    "amm": 5,
     "slsqp": 10,
     "nelder_mead": 33,
     "ngopt": 1776,
@@ -632,11 +626,11 @@
   },
   {
    "file": "f5_i3.json",
-   "v": "bfb64b8376a0",
+   "v": "cda2f2ee4709",
    "function": 5,
    "instance": 3,
    "finish": {
-    "amm": 1,
+    "amm": 5,
     "slsqp": 10,
     "nelder_mead": 19,
     "ngopt": 1715,
@@ -654,11 +648,11 @@
   },
   {
    "file": "f5_i4.json",
-   "v": "96aaad6b9672",
+   "v": "21b861e02809",
    "function": 5,
    "instance": 4,
    "finish": {
-    "amm": 1,
+    "amm": 4,
     "slsqp": 10,
     "nelder_mead": 20,
     "ngopt": null,
@@ -676,11 +670,11 @@
   },
   {
    "file": "f5_i5.json",
-   "v": "a991601989bc",
+   "v": "82801cf36a0b",
    "function": 5,
    "instance": 5,
    "finish": {
-    "amm": 2,
+    "amm": 6,
     "slsqp": 10,
     "nelder_mead": 27,
     "ngopt": 1462,
@@ -808,11 +802,11 @@
   },
   {
    "file": "f7_i1.json",
-   "v": "f2950c13245c",
+   "v": "56493e603b0b",
    "function": 7,
    "instance": 1,
    "finish": {
-    "amm": 165,
+    "amm": 47,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -820,7 +814,7 @@
     "hcma": 336
    },
    "best": {
-    "amm": 2.479e-09,
+    "amm": 3.214e-09,
     "slsqp": 0.08275,
     "nelder_mead": 0.01683,
     "ngopt": 0.006009,
@@ -830,11 +824,11 @@
   },
   {
    "file": "f7_i2.json",
-   "v": "e8541749516c",
+   "v": "ff1db2f28584",
    "function": 7,
    "instance": 2,
    "finish": {
-    "amm": 153,
+    "amm": 55,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": 1214,
@@ -842,7 +836,7 @@
     "hcma": 226
    },
    "best": {
-    "amm": 8.083e-09,
+    "amm": 6.344e-09,
     "slsqp": 0.06797,
     "nelder_mead": 10.57,
     "ngopt": 9.204e-09,
@@ -852,11 +846,11 @@
   },
   {
    "file": "f7_i3.json",
-   "v": "a269dc81e282",
+   "v": "d745d856bef4",
    "function": 7,
    "instance": 3,
    "finish": {
-    "amm": 175,
+    "amm": 48,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -864,7 +858,7 @@
     "hcma": 503
    },
    "best": {
-    "amm": 2.536e-09,
+    "amm": 5.022e-09,
     "slsqp": 0.01997,
     "nelder_mead": 0.02049,
     "ngopt": 0.02049,
@@ -874,11 +868,11 @@
   },
   {
    "file": "f7_i4.json",
-   "v": "bc15ddbb24e6",
+   "v": "30db3fb31b73",
    "function": 7,
    "instance": 4,
    "finish": {
-    "amm": 85,
+    "amm": 46,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -886,7 +880,7 @@
     "hcma": 208
    },
    "best": {
-    "amm": 2.625e-09,
+    "amm": 3.375e-09,
     "slsqp": 0.1172,
     "nelder_mead": 0.763,
     "ngopt": 0.00763,
@@ -896,11 +890,11 @@
   },
   {
    "file": "f7_i5.json",
-   "v": "e0e87468859d",
+   "v": "0766334b017c",
    "function": 7,
    "instance": 5,
    "finish": {
-    "amm": 166,
+    "amm": 54,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -908,7 +902,7 @@
     "hcma": 292
    },
    "best": {
-    "amm": 6.282e-09,
+    "amm": 2.71e-09,
     "slsqp": 0.05673,
     "nelder_mead": 1.614,
     "ngopt": 0.006304,
@@ -1138,7 +1132,7 @@
   },
   {
    "file": "f10_i1.json",
-   "v": "165161c13c4a",
+   "v": "6d0c2fc68526",
    "function": 10,
    "instance": 1,
    "finish": {
@@ -1150,7 +1144,7 @@
     "hcma": 285
    },
    "best": {
-    "amm": 6.57e-09,
+    "amm": 9.709e-09,
     "slsqp": 2.66e-07,
     "nelder_mead": 4.851e-09,
     "ngopt": 10.06,
@@ -1248,11 +1242,11 @@
   },
   {
    "file": "f11_i1.json",
-   "v": "7f088cfb7d12",
+   "v": "83b82b9c8112",
    "function": 11,
    "instance": 1,
    "finish": {
-    "amm": 99,
+    "amm": 69,
     "slsqp": 1654,
     "nelder_mead": 130,
     "ngopt": null,
@@ -1260,7 +1254,7 @@
     "hcma": 326
    },
    "best": {
-    "amm": 5.228e-09,
+    "amm": 5.85e-09,
     "slsqp": 6.725e-09,
     "nelder_mead": 5.16e-09,
     "ngopt": 13.09,
@@ -1270,11 +1264,11 @@
   },
   {
    "file": "f11_i2.json",
-   "v": "f203c4622222",
+   "v": "cd8947749009",
    "function": 11,
    "instance": 2,
    "finish": {
-    "amm": 95,
+    "amm": 69,
     "slsqp": null,
     "nelder_mead": 114,
     "ngopt": null,
@@ -1282,7 +1276,7 @@
     "hcma": 303
    },
    "best": {
-    "amm": 7.167e-09,
+    "amm": 1.087e-09,
     "slsqp": 7.512e-06,
     "nelder_mead": 7.765e-09,
     "ngopt": 0.01557,
@@ -1292,11 +1286,11 @@
   },
   {
    "file": "f11_i3.json",
-   "v": "8fa7769b6eca",
+   "v": "89d73e7735f7",
    "function": 11,
    "instance": 3,
    "finish": {
-    "amm": 96,
+    "amm": 64,
     "slsqp": null,
     "nelder_mead": 135,
     "ngopt": null,
@@ -1304,7 +1298,7 @@
     "hcma": 225
    },
    "best": {
-    "amm": 5.834e-09,
+    "amm": 6.171e-09,
     "slsqp": 1.589e-07,
     "nelder_mead": 4.249e-09,
     "ngopt": 7.491,
@@ -1314,11 +1308,11 @@
   },
   {
    "file": "f11_i4.json",
-   "v": "c029615d0858",
+   "v": "46fe6f59e6bc",
    "function": 11,
    "instance": 4,
    "finish": {
-    "amm": 103,
+    "amm": 63,
     "slsqp": 397,
     "nelder_mead": 131,
     "ngopt": null,
@@ -1326,7 +1320,7 @@
     "hcma": 257
    },
    "best": {
-    "amm": 8.172e-09,
+    "amm": 9.289e-09,
     "slsqp": 2.282e-09,
     "nelder_mead": 6.605e-10,
     "ngopt": 17.33,
@@ -1336,11 +1330,11 @@
   },
   {
    "file": "f11_i5.json",
-   "v": "6f1c5991fd9d",
+   "v": "4d19d36d227d",
    "function": 11,
    "instance": 5,
    "finish": {
-    "amm": 102,
+    "amm": 65,
     "slsqp": 446,
     "nelder_mead": 127,
     "ngopt": null,
@@ -1348,7 +1342,7 @@
     "hcma": 264
    },
    "best": {
-    "amm": 4.992e-09,
+    "amm": 6.211e-09,
     "slsqp": 8.362e-09,
     "nelder_mead": 8.603e-09,
     "ngopt": 2.133,
@@ -1358,11 +1352,11 @@
   },
   {
    "file": "f12_i1.json",
-   "v": "b7a2e6880a1a",
+   "v": "c7e0a9892363",
    "function": 12,
    "instance": 1,
    "finish": {
-    "amm": 54,
+    "amm": 26,
     "slsqp": 52,
     "nelder_mead": 145,
     "ngopt": null,
@@ -1370,7 +1364,7 @@
     "hcma": 330
    },
    "best": {
-    "amm": 1.437e-09,
+    "amm": 6.769e-10,
     "slsqp": 1.421e-09,
     "nelder_mead": 6.54e-09,
     "ngopt": 8.971e-06,
@@ -1380,11 +1374,11 @@
   },
   {
    "file": "f12_i2.json",
-   "v": "1ef5933465ab",
+   "v": "69e069be1a49",
    "function": 12,
    "instance": 2,
    "finish": {
-    "amm": 52,
+    "amm": 17,
     "slsqp": 435,
     "nelder_mead": 1447,
     "ngopt": null,
@@ -1392,7 +1386,7 @@
     "hcma": 404
    },
    "best": {
-    "amm": 4.056e-11,
+    "amm": 2.18e-11,
     "slsqp": 4.289e-11,
     "nelder_mead": 7.313e-09,
     "ngopt": 10.42,
@@ -1402,11 +1396,11 @@
   },
   {
    "file": "f12_i3.json",
-   "v": "5dd2fa3e1769",
+   "v": "c6c16e85c2e8",
    "function": 12,
    "instance": 3,
    "finish": {
-    "amm": 52,
+    "amm": 93,
     "slsqp": 871,
     "nelder_mead": 174,
     "ngopt": null,
@@ -1414,7 +1408,7 @@
     "hcma": 428
    },
    "best": {
-    "amm": 2.777e-09,
+    "amm": 5.033e-09,
     "slsqp": 9.849e-09,
     "nelder_mead": 4.44e-09,
     "ngopt": 17.1,
@@ -1424,11 +1418,11 @@
   },
   {
    "file": "f12_i4.json",
-   "v": "6cc0c1e628c8",
+   "v": "8a8dc03e5493",
    "function": 12,
    "instance": 4,
    "finish": {
-    "amm": 53,
+    "amm": 796,
     "slsqp": 523,
     "nelder_mead": 226,
     "ngopt": null,
@@ -1436,7 +1430,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 2.891e-09,
+    "amm": 4.413e-09,
     "slsqp": 3.515e-11,
     "nelder_mead": 9.102e-09,
     "ngopt": 5.797,
@@ -1446,11 +1440,11 @@
   },
   {
    "file": "f12_i5.json",
-   "v": "834c00c6ef91",
+   "v": "442496dc9b4a",
    "function": 12,
    "instance": 5,
    "finish": {
-    "amm": 53,
+    "amm": 17,
     "slsqp": 26,
     "nelder_mead": 165,
     "ngopt": null,
@@ -1458,7 +1452,7 @@
     "hcma": 515
    },
    "best": {
-    "amm": 1e-12,
+    "amm": 5.597e-11,
     "slsqp": 5.895e-11,
     "nelder_mead": 6.049e-10,
     "ngopt": 2.874,
@@ -1468,11 +1462,11 @@
   },
   {
    "file": "f13_i1.json",
-   "v": "b7366f3f02f0",
+   "v": "77f7ae3103f3",
    "function": 13,
    "instance": 1,
    "finish": {
-    "amm": 129,
+    "amm": 85,
     "slsqp": null,
     "nelder_mead": 177,
     "ngopt": null,
@@ -1480,7 +1474,7 @@
     "hcma": 383
    },
    "best": {
-    "amm": 8.829e-09,
+    "amm": 9.142e-09,
     "slsqp": 1.5e-06,
     "nelder_mead": 3.16e-09,
     "ngopt": 1.652,
@@ -1490,11 +1484,11 @@
   },
   {
    "file": "f13_i2.json",
-   "v": "38a334b21a74",
+   "v": "c093daf729d1",
    "function": 13,
    "instance": 2,
    "finish": {
-    "amm": 131,
+    "amm": 84,
     "slsqp": 97,
     "nelder_mead": 154,
     "ngopt": null,
@@ -1502,7 +1496,7 @@
     "hcma": 446
    },
    "best": {
-    "amm": 2.619e-09,
+    "amm": 2.068e-10,
     "slsqp": 9.653e-09,
     "nelder_mead": 8.483e-09,
     "ngopt": 1.279,
@@ -1512,11 +1506,11 @@
   },
   {
    "file": "f13_i3.json",
-   "v": "468911611788",
+   "v": "b88dc007d8a4",
    "function": 13,
    "instance": 3,
    "finish": {
-    "amm": 127,
+    "amm": 87,
     "slsqp": null,
     "nelder_mead": 162,
     "ngopt": null,
@@ -1524,7 +1518,7 @@
     "hcma": 381
    },
    "best": {
-    "amm": 6.173e-09,
+    "amm": 5.522e-10,
     "slsqp": 2.078e-08,
     "nelder_mead": 8.654e-09,
     "ngopt": 17.47,
@@ -1534,11 +1528,11 @@
   },
   {
    "file": "f13_i4.json",
-   "v": "e1e10cbcb92f",
+   "v": "f231f72c7e6d",
    "function": 13,
    "instance": 4,
    "finish": {
-    "amm": 134,
+    "amm": 84,
     "slsqp": null,
     "nelder_mead": 161,
     "ngopt": null,
@@ -1546,7 +1540,7 @@
     "hcma": 342
    },
    "best": {
-    "amm": 5.463e-09,
+    "amm": 5.218e-10,
     "slsqp": 2.715e-08,
     "nelder_mead": 6.214e-10,
     "ngopt": 0.002596,
@@ -1556,11 +1550,11 @@
   },
   {
    "file": "f13_i5.json",
-   "v": "52cd837e155c",
+   "v": "617cf4534f1d",
    "function": 13,
    "instance": 5,
    "finish": {
-    "amm": 136,
+    "amm": 88,
     "slsqp": null,
     "nelder_mead": 137,
     "ngopt": null,
@@ -1568,7 +1562,7 @@
     "hcma": 349
    },
    "best": {
-    "amm": 6.566e-09,
+    "amm": 4.906e-09,
     "slsqp": 4.271e-07,
     "nelder_mead": 6.555e-09,
     "ngopt": 0.004041,
@@ -1578,11 +1572,11 @@
   },
   {
    "file": "f14_i1.json",
-   "v": "089b5aa287ab",
+   "v": "68ace61429be",
    "function": 14,
    "instance": 1,
    "finish": {
-    "amm": 97,
+    "amm": 77,
     "slsqp": 612,
     "nelder_mead": 129,
     "ngopt": null,
@@ -1590,7 +1584,7 @@
     "hcma": 314
    },
    "best": {
-    "amm": 5.925e-09,
+    "amm": 9.461e-09,
     "slsqp": 7.37e-09,
     "nelder_mead": 7.566e-09,
     "ngopt": 0.0004595,
@@ -1600,11 +1594,11 @@
   },
   {
    "file": "f14_i2.json",
-   "v": "2be55d0a6b50",
+   "v": "c35c5d79bfd7",
    "function": 14,
    "instance": 2,
    "finish": {
-    "amm": 100,
+    "amm": 71,
     "slsqp": 459,
     "nelder_mead": 131,
     "ngopt": null,
@@ -1612,7 +1606,7 @@
     "hcma": 312
    },
    "best": {
-    "amm": 5.839e-09,
+    "amm": 6.011e-09,
     "slsqp": 9.082e-09,
     "nelder_mead": 6.249e-09,
     "ngopt": 0.0001678,
@@ -1622,11 +1616,11 @@
   },
   {
    "file": "f14_i3.json",
-   "v": "addadf38425b",
+   "v": "f89d6825a901",
    "function": 14,
    "instance": 3,
    "finish": {
-    "amm": 94,
+    "amm": 82,
     "slsqp": 408,
     "nelder_mead": 94,
     "ngopt": null,
@@ -1634,7 +1628,7 @@
     "hcma": 318
    },
    "best": {
-    "amm": 6.317e-09,
+    "amm": 9.435e-09,
     "slsqp": 7.695e-09,
     "nelder_mead": 8.676e-09,
     "ngopt": 6.724e-05,
@@ -1644,11 +1638,11 @@
   },
   {
    "file": "f14_i4.json",
-   "v": "d12329c1e21a",
+   "v": "1f0774269d5d",
    "function": 14,
    "instance": 4,
    "finish": {
-    "amm": 92,
+    "amm": 89,
     "slsqp": 153,
     "nelder_mead": 138,
     "ngopt": null,
@@ -1656,7 +1650,7 @@
     "hcma": 298
    },
    "best": {
-    "amm": 8.968e-09,
+    "amm": 2.772e-09,
     "slsqp": 7.77e-09,
     "nelder_mead": 8.589e-09,
     "ngopt": 0.0008619,
@@ -1666,11 +1660,11 @@
   },
   {
    "file": "f14_i5.json",
-   "v": "64ff6cc090f7",
+   "v": "f6be2b2a900f",
    "function": 14,
    "instance": 5,
    "finish": {
-    "amm": 95,
+    "amm": 74,
     "slsqp": 898,
     "nelder_mead": 91,
     "ngopt": null,
@@ -1678,7 +1672,7 @@
     "hcma": 314
    },
    "best": {
-    "amm": 4.632e-09,
+    "amm": 4.45e-11,
     "slsqp": 8.976e-09,
     "nelder_mead": 3.043e-09,
     "ngopt": 0.0002134,
@@ -1798,11 +1792,11 @@
   },
   {
    "file": "f16_i1.json",
-   "v": "c4dbe31b370c",
+   "v": "87fc6a4c0a95",
    "function": 16,
    "instance": 1,
    "finish": {
-    "amm": 308,
+    "amm": 86,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -1810,7 +1804,7 @@
     "hcma": 1253
    },
    "best": {
-    "amm": 9.873e-09,
+    "amm": 3.979e-09,
     "slsqp": 8.8,
     "nelder_mead": 0.2438,
     "ngopt": 0.03567,
@@ -1820,11 +1814,11 @@
   },
   {
    "file": "f16_i2.json",
-   "v": "826230763467",
+   "v": "78b069551b74",
    "function": 16,
    "instance": 2,
    "finish": {
-    "amm": 322,
+    "amm": 91,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -1832,7 +1826,7 @@
     "hcma": 1280
    },
    "best": {
-    "amm": 7.437e-09,
+    "amm": 2.627e-09,
     "slsqp": 33.36,
     "nelder_mead": 0.02803,
     "ngopt": 17.19,
@@ -1842,11 +1836,11 @@
   },
   {
    "file": "f16_i3.json",
-   "v": "78395e160a8a",
+   "v": "03279b001ee3",
    "function": 16,
    "instance": 3,
    "finish": {
-    "amm": 328,
+    "amm": 89,
     "slsqp": null,
     "nelder_mead": 1962,
     "ngopt": null,
@@ -1854,7 +1848,7 @@
     "hcma": 1446
    },
    "best": {
-    "amm": 4.639e-09,
+    "amm": 5.058e-10,
     "slsqp": 2.41,
     "nelder_mead": 3.097e-09,
     "ngopt": 0.4889,
@@ -1864,11 +1858,11 @@
   },
   {
    "file": "f16_i4.json",
-   "v": "efebed80cb1e",
+   "v": "93bc2e69c1dc",
    "function": 16,
    "instance": 4,
    "finish": {
-    "amm": 338,
+    "amm": 95,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -1876,7 +1870,7 @@
     "hcma": 588
    },
    "best": {
-    "amm": 6.329e-10,
+    "amm": 9.101e-09,
     "slsqp": 9.761,
     "nelder_mead": 0.004104,
     "ngopt": 1.296,
@@ -1886,11 +1880,11 @@
   },
   {
    "file": "f16_i5.json",
-   "v": "f04e7f09df93",
+   "v": "33d55cb0a1dc",
    "function": 16,
    "instance": 5,
    "finish": {
-    "amm": 350,
+    "amm": 90,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -1898,7 +1892,7 @@
     "hcma": 584
    },
    "best": {
-    "amm": 8.485e-09,
+    "amm": 8.478e-11,
     "slsqp": 1.967,
     "nelder_mead": 4.724e-07,
     "ngopt": 0.3095,
@@ -1908,11 +1902,11 @@
   },
   {
    "file": "f17_i1.json",
-   "v": "5b309c0042e3",
+   "v": "73a3825cfc5c",
    "function": 17,
    "instance": 1,
    "finish": {
-    "amm": 940,
+    "amm": 434,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -1920,7 +1914,7 @@
     "hcma": 1541
    },
    "best": {
-    "amm": 7.594e-09,
+    "amm": 8.921e-09,
     "slsqp": 0.7426,
     "nelder_mead": 3.997,
     "ngopt": 0.0009828,
@@ -1930,11 +1924,11 @@
   },
   {
    "file": "f17_i2.json",
-   "v": "25bec7cf8090",
+   "v": "6d016279150d",
    "function": 17,
    "instance": 2,
    "finish": {
-    "amm": 946,
+    "amm": 454,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -1942,7 +1936,7 @@
     "hcma": 1724
    },
    "best": {
-    "amm": 7.565e-09,
+    "amm": 6.584e-09,
     "slsqp": 0.753,
     "nelder_mead": 3.997,
     "ngopt": 1.735,
@@ -1952,11 +1946,11 @@
   },
   {
    "file": "f17_i3.json",
-   "v": "b25a5903217b",
+   "v": "34c3763222b9",
    "function": 17,
    "instance": 3,
    "finish": {
-    "amm": 917,
+    "amm": 425,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -1964,7 +1958,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 3.49e-09,
+    "amm": 5.568e-09,
     "slsqp": 0.5479,
     "nelder_mead": 1.849,
     "ngopt": 0.2432,
@@ -1974,11 +1968,11 @@
   },
   {
    "file": "f17_i4.json",
-   "v": "a0af17c06f99",
+   "v": "a7e36c8232de",
    "function": 17,
    "instance": 4,
    "finish": {
-    "amm": 941,
+    "amm": 264,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -1986,7 +1980,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 8.229e-09,
+    "amm": 4.506e-09,
     "slsqp": 0.003021,
     "nelder_mead": 3.997,
     "ngopt": 4.468,
@@ -1996,11 +1990,11 @@
   },
   {
    "file": "f17_i5.json",
-   "v": "c838b93b7737",
+   "v": "1dc51a69e670",
    "function": 17,
    "instance": 5,
    "finish": {
-    "amm": 956,
+    "amm": 419,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2008,7 +2002,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 8.057e-09,
+    "amm": 3.175e-09,
     "slsqp": 0.03743,
     "nelder_mead": 3.131,
     "ngopt": 0.03193,
@@ -2018,11 +2012,11 @@
   },
   {
    "file": "f18_i1.json",
-   "v": "960ddd77598c",
+   "v": "299011f716e6",
    "function": 18,
    "instance": 1,
    "finish": {
-    "amm": 517,
+    "amm": 442,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2030,7 +2024,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 4.927e-09,
+    "amm": 5.301e-09,
     "slsqp": 6.559,
     "nelder_mead": 2.423,
     "ngopt": 0.2431,
@@ -2040,11 +2034,11 @@
   },
   {
    "file": "f18_i2.json",
-   "v": "3210aff03a9e",
+   "v": "b371973d662b",
    "function": 18,
    "instance": 2,
    "finish": {
-    "amm": 519,
+    "amm": 464,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2052,7 +2046,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 4.202e-09,
+    "amm": 2.24e-09,
     "slsqp": 17.67,
     "nelder_mead": 5.043,
     "ngopt": 3.276,
@@ -2062,11 +2056,11 @@
   },
   {
    "file": "f18_i3.json",
-   "v": "9a79216093fe",
+   "v": "51bff0c08dfb",
    "function": 18,
    "instance": 3,
    "finish": {
-    "amm": 523,
+    "amm": 490,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2074,7 +2068,7 @@
     "hcma": 1818
    },
    "best": {
-    "amm": 9.698e-09,
+    "amm": 9.872e-09,
     "slsqp": 1.849,
     "nelder_mead": 1.389,
     "ngopt": 46.28,
@@ -2084,11 +2078,11 @@
   },
   {
    "file": "f18_i4.json",
-   "v": "6a567d711d28",
+   "v": "7a5df0d852f2",
    "function": 18,
    "instance": 4,
    "finish": {
-    "amm": 518,
+    "amm": 482,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2096,7 +2090,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 7.095e-09,
+    "amm": 3.219e-09,
     "slsqp": 0.7613,
     "nelder_mead": 0.3629,
     "ngopt": 0.03196,
@@ -2106,11 +2100,11 @@
   },
   {
    "file": "f18_i5.json",
-   "v": "83cbaa1f3223",
+   "v": "f3bce2e9173b",
    "function": 18,
    "instance": 5,
    "finish": {
-    "amm": 533,
+    "amm": 518,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2118,7 +2112,7 @@
     "hcma": 1488
    },
    "best": {
-    "amm": 5.87e-09,
+    "amm": 9.934e-09,
     "slsqp": 7.793,
     "nelder_mead": 6.299,
     "ngopt": 2.84,
@@ -2128,11 +2122,11 @@
   },
   {
    "file": "f19_i1.json",
-   "v": "e33dd117aeba",
+   "v": "0b17faea7664",
    "function": 19,
    "instance": 1,
    "finish": {
-    "amm": 101,
+    "amm": 96,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2140,7 +2134,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 2.87e-09,
+    "amm": 3.564e-09,
     "slsqp": 2.607,
     "nelder_mead": 0.1728,
     "ngopt": 0.1885,
@@ -2150,11 +2144,11 @@
   },
   {
    "file": "f19_i2.json",
-   "v": "4d835cb44831",
+   "v": "1fac56c8619f",
    "function": 19,
    "instance": 2,
    "finish": {
-    "amm": 131,
+    "amm": 76,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2162,7 +2156,7 @@
     "hcma": 1393
    },
    "best": {
-    "amm": 1.768e-09,
+    "amm": 4.114e-09,
     "slsqp": 0.01571,
     "nelder_mead": 0.01571,
     "ngopt": 0.002661,
@@ -2172,11 +2166,11 @@
   },
   {
    "file": "f19_i3.json",
-   "v": "e0109e9e6c63",
+   "v": "c4ad00e88c3e",
    "function": 19,
    "instance": 3,
    "finish": {
-    "amm": 100,
+    "amm": 68,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2184,7 +2178,7 @@
     "hcma": 579
    },
    "best": {
-    "amm": 6.44e-09,
+    "amm": 7.81e-09,
     "slsqp": 6.283,
     "nelder_mead": 0.03142,
     "ngopt": 0.2827,
@@ -2194,11 +2188,11 @@
   },
   {
    "file": "f19_i4.json",
-   "v": "349f1484fac3",
+   "v": "679697ba0280",
    "function": 19,
    "instance": 4,
    "finish": {
-    "amm": 117,
+    "amm": 92,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2206,7 +2200,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 5.79e-09,
+    "amm": 1.737e-09,
     "slsqp": 0.3168,
     "nelder_mead": 0.03142,
     "ngopt": 3.904e-05,
@@ -2216,11 +2210,11 @@
   },
   {
    "file": "f19_i5.json",
-   "v": "2bd4e5daf5f1",
+   "v": "694aa0259bdf",
    "function": 19,
    "instance": 5,
    "finish": {
-    "amm": 110,
+    "amm": 86,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2228,7 +2222,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 1.253e-09,
+    "amm": 4.729e-09,
     "slsqp": 0.03142,
     "nelder_mead": 0.03142,
     "ngopt": 0.01571,
@@ -2238,11 +2232,11 @@
   },
   {
    "file": "f20_i1.json",
-   "v": "2e258962bdb9",
+   "v": "666618bf2032",
    "function": 20,
    "instance": 1,
    "finish": {
-    "amm": 60,
+    "amm": 31,
     "slsqp": 712,
     "nelder_mead": null,
     "ngopt": null,
@@ -2250,7 +2244,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 1.087e-09,
+    "amm": 5.309e-11,
     "slsqp": 1.511e-10,
     "nelder_mead": 0.5922,
     "ngopt": 1.12,
@@ -2260,11 +2254,11 @@
   },
   {
    "file": "f20_i2.json",
-   "v": "f01b2b879b41",
+   "v": "50011b5ceea8",
    "function": 20,
    "instance": 2,
    "finish": {
-    "amm": 59,
+    "amm": 27,
     "slsqp": 826,
     "nelder_mead": 604,
     "ngopt": null,
@@ -2272,7 +2266,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 8.299e-11,
+    "amm": 5.356e-09,
     "slsqp": 2.577e-10,
     "nelder_mead": 7.02e-09,
     "ngopt": 1.596,
@@ -2282,11 +2276,11 @@
   },
   {
    "file": "f20_i3.json",
-   "v": "3f1cd35bc958",
+   "v": "4177d63ddc0e",
    "function": 20,
    "instance": 3,
    "finish": {
-    "amm": 60,
+    "amm": 31,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2294,7 +2288,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 5.059e-12,
+    "amm": 2.579e-09,
     "slsqp": 0.5922,
     "nelder_mead": 0.5922,
     "ngopt": 0.5922,
@@ -2304,11 +2298,11 @@
   },
   {
    "file": "f20_i4.json",
-   "v": "4fca0c2cbb3b",
+   "v": "623cfcd2c436",
    "function": 20,
    "instance": 4,
    "finish": {
-    "amm": 55,
+    "amm": 24,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": 1202,
@@ -2316,7 +2310,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 2.399e-10,
+    "amm": 7.541e-10,
     "slsqp": 0.5922,
     "nelder_mead": 0.5922,
     "ngopt": 7.817e-09,
@@ -2326,11 +2320,11 @@
   },
   {
    "file": "f20_i5.json",
-   "v": "5dbb073c522e",
+   "v": "9a3a9af34dc0",
    "function": 20,
    "instance": 5,
    "finish": {
-    "amm": 58,
+    "amm": 23,
     "slsqp": null,
     "nelder_mead": 1847,
     "ngopt": 1669,
@@ -2338,7 +2332,7 @@
     "hcma": 728
    },
    "best": {
-    "amm": 1.905e-09,
+    "amm": 5.942e-10,
     "slsqp": 0.5922,
     "nelder_mead": 9.09e-10,
     "ngopt": 2.328e-09,
@@ -2370,7 +2364,7 @@
   },
   {
    "file": "f21_i2.json",
-   "v": "551fb7931da5",
+   "v": "14eedd46131e",
    "function": 21,
    "instance": 2,
    "finish": {
@@ -2382,7 +2376,7 @@
     "hcma": 1132
    },
    "best": {
-    "amm": 7.679e-11,
+    "amm": 7.882e-11,
     "slsqp": 4.573e-10,
     "nelder_mead": 7.711e-10,
     "ngopt": 8.682e-10,
@@ -2568,11 +2562,11 @@
   },
   {
    "file": "f23_i1.json",
-   "v": "84ca8e1b37ce",
+   "v": "b068cc4958d1",
    "function": 23,
    "instance": 1,
    "finish": {
-    "amm": 608,
+    "amm": 176,
     "slsqp": null,
     "nelder_mead": 154,
     "ngopt": null,
@@ -2580,7 +2574,7 @@
     "hcma": 782
    },
    "best": {
-    "amm": 9.323e-09,
+    "amm": 8.732e-09,
     "slsqp": 4.103,
     "nelder_mead": 8.016e-09,
     "ngopt": 0.4532,
@@ -2590,11 +2584,11 @@
   },
   {
    "file": "f23_i2.json",
-   "v": "c65a1d66c9c1",
+   "v": "11135909aba3",
    "function": 23,
    "instance": 2,
    "finish": {
-    "amm": 584,
+    "amm": 169,
     "slsqp": null,
     "nelder_mead": 357,
     "ngopt": null,
@@ -2602,7 +2596,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 8.839e-09,
+    "amm": 8.339e-09,
     "slsqp": 0.786,
     "nelder_mead": 5.455e-09,
     "ngopt": 0.002248,
@@ -2612,11 +2606,11 @@
   },
   {
    "file": "f23_i3.json",
-   "v": "86815152cf76",
+   "v": "1c59c4a46b2c",
    "function": 23,
    "instance": 3,
    "finish": {
-    "amm": 517,
+    "amm": 178,
     "slsqp": null,
     "nelder_mead": 353,
     "ngopt": null,
@@ -2624,7 +2618,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 7.664e-09,
+    "amm": 6.767e-09,
     "slsqp": 2.312,
     "nelder_mead": 9.449e-09,
     "ngopt": 1.146e-08,
@@ -2634,11 +2628,11 @@
   },
   {
    "file": "f23_i4.json",
-   "v": "f74f18ee2b8f",
+   "v": "3870ad4ac871",
    "function": 23,
    "instance": 4,
    "finish": {
-    "amm": 544,
+    "amm": 168,
     "slsqp": null,
     "nelder_mead": 511,
     "ngopt": null,
@@ -2646,7 +2640,7 @@
     "hcma": 1867
    },
    "best": {
-    "amm": 5.179e-09,
+    "amm": 6.363e-09,
     "slsqp": 0.8576,
     "nelder_mead": 5.813e-09,
     "ngopt": 0.02923,
@@ -2656,11 +2650,11 @@
   },
   {
    "file": "f23_i5.json",
-   "v": "164087e617b0",
+   "v": "8d1bf5bebee2",
    "function": 23,
    "instance": 5,
    "finish": {
-    "amm": 561,
+    "amm": 180,
     "slsqp": null,
     "nelder_mead": 769,
     "ngopt": null,
@@ -2668,7 +2662,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 4.76e-09,
+    "amm": 6.262e-09,
     "slsqp": 0.4539,
     "nelder_mead": 3.451e-09,
     "ngopt": 0.3863,
@@ -2678,11 +2672,11 @@
   },
   {
    "file": "f24_i1.json",
-   "v": "199ad9538a05",
+   "v": "5e909f736d73",
    "function": 24,
    "instance": 1,
    "finish": {
-    "amm": 955,
+    "amm": 290,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2690,7 +2684,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 3.259e-09,
+    "amm": 4.167e-10,
     "slsqp": 0.5326,
     "nelder_mead": 2.059,
     "ngopt": 3.253,
@@ -2700,11 +2694,11 @@
   },
   {
    "file": "f24_i2.json",
-   "v": "33f0abbbc211",
+   "v": "9a116b2781f6",
    "function": 24,
    "instance": 2,
    "finish": {
-    "amm": 986,
+    "amm": 1547,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2712,7 +2706,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 2.045e-10,
+    "amm": 1.035e-11,
     "slsqp": 2.017,
     "nelder_mead": 2.204,
     "ngopt": 4.3,
@@ -2722,11 +2716,11 @@
   },
   {
    "file": "f24_i3.json",
-   "v": "c5c551c95046",
+   "v": "1d899ae33bab",
    "function": 24,
    "instance": 3,
    "finish": {
-    "amm": 71,
+    "amm": null,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2734,7 +2728,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 4.694e-11,
+    "amm": 0.06408,
     "slsqp": 0.1584,
     "nelder_mead": 3.201,
     "ngopt": 21.56,
@@ -2744,11 +2738,11 @@
   },
   {
    "file": "f24_i4.json",
-   "v": "6a584bdcf583",
+   "v": "d99ea0d06f29",
    "function": 24,
    "instance": 4,
    "finish": {
-    "amm": 1723,
+    "amm": 130,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2756,7 +2750,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 5.091e-09,
+    "amm": 3.003e-09,
     "slsqp": 1.01,
     "nelder_mead": 3.771,
     "ngopt": 1.397,
@@ -2766,11 +2760,11 @@
   },
   {
    "file": "f24_i5.json",
-   "v": "0a7253c4d674",
+   "v": "c1d020519afc",
    "function": 24,
    "instance": 5,
    "finish": {
-    "amm": 865,
+    "amm": 239,
     "slsqp": null,
     "nelder_mead": null,
     "ngopt": null,
@@ -2778,7 +2772,7 @@
     "hcma": null
    },
    "best": {
-    "amm": 8.768e-09,
+    "amm": 2.1e-10,
     "slsqp": 0.9053,
     "nelder_mead": 0.8967,
     "ngopt": 1.142,

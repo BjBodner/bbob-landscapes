@@ -517,6 +517,8 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--only", help="re-record only these optimizers (comma-separated) into the existing files")
     ap.add_argument("--best-of", type=int, default=1,
                     help="with --only: run each optimizer with this many seeds and keep its best run")
+    ap.add_argument("--seeds", type=Path,
+                    help="with --only amm: record the seed chosen per race in this file (race/joint_opt.py)")
     a = ap.parse_args(argv)
     OUT.mkdir(parents=True, exist_ok=True)
     if a.verify:
@@ -530,7 +532,8 @@ def main(argv: list[str] | None = None) -> None:
                                    "--functions", ",".join(map(str, c))]
                                   + (["--hcma", str(a.hcma)] if a.hcma else [])
                                   + (["--only", a.only] if a.only else [])
-                                  + (["--best-of", str(a.best_of)] if a.best_of > 1 else []))
+                                  + (["--best-of", str(a.best_of)] if a.best_of > 1 else [])
+                                  + (["--seeds", str(a.seeds)] if a.seeds else []))
                  for c in chunks if c]
         if any(p.wait() for p in procs):
             raise SystemExit("a worker failed")
@@ -545,7 +548,14 @@ def main(argv: list[str] | None = None) -> None:
                 path = OUT / f"f{f}_i{k}.json"
                 d = json.loads(path.read_text())
                 problem, fopt = bbob(f, k), round(float(d["landscape"]["f_opt"]), 2)
+                chosen = json.loads(a.seeds.read_text()) if a.seeds else None
                 for n in names:
+                    if chosen and n == "amm":   # the seed picked per race by race/joint_opt.py
+                        r = chosen["races"][f"{f}_{k}"]["rep"]
+                        rec = run(n, problem, fopt, k, r)
+                        d["runs"][n] = {**encode(rec.xs, np.asarray(rec.values) - fopt), "rep": r,
+                                        "best_of": chosen["best_of"]}
+                        continue
                     best = None
                     for r in range(a.best_of):   # the best run: earliest to the target, else lowest value
                         rec = run(n, problem, fopt, k, r)
