@@ -37,6 +37,7 @@ import argparse
 import base64
 import contextlib
 import datetime as dt
+import functools
 import hashlib
 import inspect
 import json
@@ -85,6 +86,7 @@ class Recorder:
         self.xs: list[np.ndarray] = []
         self.values: list[float] = []
         self.best = float("inf")
+        self.best_x: np.ndarray | None = None
 
     @property
     def done(self) -> bool:
@@ -100,7 +102,8 @@ class Recorder:
             value += self.penalty * float(np.sum((x - clipped) ** 2))
         self.xs.append(x)
         self.values.append(value)
-        self.best = min(self.best, value)
+        if value < self.best:
+            self.best, self.best_x = value, x
         return value
 
 
@@ -143,16 +146,37 @@ class Solver:
 
 
 class AMM(Solver):
+    """amm_optimizer.minimize with the c46 preset, unchanged.
+
+    ``schedule`` (budget multiples of D): instead of one run with the whole budget, a run
+    with each budget in turn and then one with whatever is left, so an easy function is
+    finished by a short run while a hard one still gets a long one (AMM plans for the
+    budget it is given). ``warm``: each later run starts from the best point so far,
+    otherwise from a new uniform point. The run never sees f_opt; it stops only because
+    the harness stops it at the target or at the budget.
+    """
+
     penalty = 1.0  # FT1 ran AMM with the default penalty
 
-    def __init__(self) -> None:
+    def __init__(self, schedule: tuple[float, ...] = (), warm: bool = True) -> None:
         import amm_optimizer
 
         self.minimize = amm_optimizer.minimize
         self.config = amm_optimizer.presets.get("c46")
+        self.schedule, self.warm = tuple(schedule), warm
 
     def solve(self, fun, x0, budget):
-        self.minimize(fun, x0, budget, rng=self.rng, config=self.config, bounds=(-5.0, 5.0))
+        start, x = len(fun.values), np.asarray(x0, dtype=float)
+        for stage in [int(round(m * DIM)) for m in self.schedule] + [None]:
+            left = budget - (len(fun.values) - start)
+            if left <= 0:
+                return
+            self.minimize(fun, x, left if stage is None else min(stage, left), rng=self.rng,
+                          config=self.config, bounds=(-5.0, 5.0))
+            if self.warm and fun.best_x is not None:
+                x = np.clip(fun.best_x, fun.lower, fun.upper)
+            else:
+                x = fun.lower + (fun.upper - fun.lower) * self.start_rng.rand(DIM)
 
 
 class SLSQP(Solver):
@@ -199,11 +223,25 @@ class CMABipop(Solver):
         cma.fmin2(fun, start, 2.0, opts, restarts=9, bipop=True)
 
 
-SOLVERS = {"amm": AMM, "slsqp": SLSQP, "nelder_mead": NelderMead, "ngopt": NGOpt,
-           "cma_bipop": CMABipop}
+# How AMM runs in the race: chosen by race/tune_amm.py on instances 6-15, which the race
+# does not show (race/tuning/results.json).
+RACE_AMM: dict = {"schedule": (5, 10, 30, 100), "warm": True}  # "lead5_to100"
+SOLVERS = {"amm": functools.partial(AMM, **RACE_AMM), "slsqp": SLSQP, "nelder_mead": NelderMead,
+           "ngopt": NGOpt, "cma_bipop": CMABipop}
+
+
+def amm_note() -> str:
+    """One line for the page: how AMM was run."""
+    if not RACE_AMM["schedule"]:
+        return "AMM: the c46 preset with the whole budget."
+    stages = ", ".join(f"{m:g}" for m in RACE_AMM["schedule"])
+    start = "the best point so far" if RACE_AMM["warm"] else "a new random point"
+    return (f"AMM: the c46 preset run with budgets of {stages} × D in turn, then the rest, each run starting "
+            f"from {start}, so an easy function ends in a short run.")
 
 CALLS = {
-    "amm": "amm_optimizer.minimize(f, x0, budget, rng, config=presets.get('c46'), bounds=(-5, 5)); "
+    "amm": "amm_optimizer.minimize(f, x0, budget, rng, config=presets.get('c46'), bounds=(-5, 5)) on the "
+           "budget schedule RACE_AMM (see AMM in race/record.py); "
            "points clipped to the box with penalty |x - clip(x)|^2",
     "slsqp": "scipy.optimize.minimize(f, x0, method='SLSQP', bounds=[(-5, 5)] * 2, "
              "options={'maxiter': budget, 'ftol': 1e-14}), restarted",
@@ -319,7 +357,8 @@ def bbob(f: int, k: int):
     """The bbob problem of function f, instance k, in 2-D."""
     import cocoex
 
-    suite = cocoex.Suite("bbob", "", f"function_indices: {f} dimensions: {DIM} instance_indices: {k}")
+    # explicit instance numbers ("instance_indices" would index the default year's list)
+    suite = cocoex.Suite("bbob", f"instances: {k}", f"function_indices: {f} dimensions: {DIM}")
     _SUITES.append(suite)
     return suite.get_problem(0)
 
@@ -395,7 +434,8 @@ def write_index() -> None:
         "recorded": dt.date.today().isoformat(),
         "dim": DIM, "budget": BUDGET, "finish": FINISH, "grid": GRID,
         "x_range": X_RANGE, "log_floor": LOG_FLOOR, "optimizers": OPTIMIZERS,
-        "calls": CALLS, "versions": versions(),
+        "calls": CALLS, "amm_race": {"schedule": list(RACE_AMM["schedule"]), "warm": RACE_AMM["warm"]},
+        "amm_note": amm_note(), "versions": versions(),
         "seeds": "race (f, k): bbob instance k; SeedSequence([0x41544D, k, f, 2, k]) split into "
                  "start points and optimizer stream, as in the FT1 harness",
         "thumbs": thumbs,
@@ -428,6 +468,7 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--hcma", type=Path, help="the archive's .tgz or extracted folder")
     ap.add_argument("--verify", type=int, metavar="N", help="re-run N random runs and compare")
     ap.add_argument("--index-only", action="store_true")
+    ap.add_argument("--only", help="re-record only these optimizers (comma-separated) into the existing files")
     a = ap.parse_args(argv)
     OUT.mkdir(parents=True, exist_ok=True)
     if a.verify:
@@ -439,11 +480,30 @@ def main(argv: list[str] | None = None) -> None:
         chunks = [functions[i::a.jobs] for i in range(a.jobs)]
         procs = [subprocess.Popen([sys.executable, __file__, "--jobs", "1", "--instances", a.instances,
                                    "--functions", ",".join(map(str, c))]
-                                  + (["--hcma", str(a.hcma)] if a.hcma else []))
+                                  + (["--hcma", str(a.hcma)] if a.hcma else [])
+                                  + (["--only", a.only] if a.only else []))
                  for c in chunks if c]
         if any(p.wait() for p in procs):
             raise SystemExit("a worker failed")
         return write_index()
+    if a.only:
+        names = a.only.split(",")
+        unknown = [n for n in names if n not in SOLVERS]
+        if unknown:
+            raise SystemExit(f"cannot re-run {unknown} (HCMA comes from the archive)")
+        for f in functions:
+            for k in instances:
+                path = OUT / f"f{f}_i{k}.json"
+                d = json.loads(path.read_text())
+                problem, fopt = bbob(f, k), round(float(d["landscape"]["f_opt"]), 2)
+                for n in names:
+                    rec = run(n, problem, fopt, k)
+                    d["runs"][n] = encode(rec.xs, np.asarray(rec.values) - fopt)
+                path.write_text(json.dumps(d, separators=(",", ":")), encoding="utf-8")
+                print(f"f{f} i{k}: " + " ".join(f"{n}={d['runs'][n]['finish'] or '-'}" for n in names), flush=True)
+        if a.jobs == 1 and len(functions) == 24:
+            write_index()
+        return None
     hcma = HCMAArchive(a.hcma)
     for f in functions:
         for k in instances:

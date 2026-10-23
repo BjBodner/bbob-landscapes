@@ -103,7 +103,7 @@ function mount(el, o = {}) {
     <p class="br-sr" data-live aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
     <footer class="br-foot">
       <span data-raceline></span>
-      <span>Single recorded runs, one per optimizer; an illustration, not a benchmark. HCMA: COCO data archive (Loshchilov 2013), logged samples only.${o.note ? " " + o.note : ""}</span>
+      <span>Single recorded runs, one per optimizer; an illustration, not a benchmark. <span data-ammnote></span> HCMA: COCO data archive (Loshchilov 2013), logged samples only.${o.note ? " " + o.note : ""}</span>
       <span class="br-keys"><kbd>Space</kbd> play · <kbd>R</kbd> restart · <kbd>↑</kbd> <kbd>↓</kbd> function · <kbd>1</kbd>–<kbd>5</kbd> seed</span>
       ${o.source ? `<span><a href="${o.source}" target="_blank" rel="noopener">Source code and data</a> · functions from <a href="https://github.com/numbbo/coco" target="_blank" rel="noopener">COCO</a></span>` : ""}
     </footer>
@@ -624,6 +624,7 @@ function mount(el, o = {}) {
   readTheme();
   fetch(base + "index.json").then(r => r.json()).then(ix => {
     INDEX = ix;
+    if (ix.amm_note) q("[data-ammnote]").textContent = ix.amm_note;
     drawThumbs();
     drawScale();
     const s = (o.hash && hashed()) || o.start || { f: 1, seed: 1 };

@@ -28,6 +28,11 @@ python build.py --instance 7    # another bbob instance
 
 [`race.html`](race.html) replays recorded runs of six optimizers on one bbob function in 2-D, evaluation by evaluation: AMM (amm-optimizer 0.3.0, preset c46), HCMA, SLSQP, Nelder-Mead, NGOpt and CMA-BIPOP.
 
+* **How AMM runs here.** AMM plans for the budget it is given, so with all 2000 evaluations at once it spends its first 20% on a global search, even on an easy function. In the race it therefore runs c46 with budgets of 5, 10, 30 and 100 × D in turn, then the rest, each run starting from the best point so far.
+  * `race/tune_amm.py` chose this schedule from 14 candidates on bbob instances 6-15, which the race does not show (`race/tuning/results.json`). There it won 101 of 240 races against SLSQP and HCMA, against 63 for c46 with the whole budget.
+  * On the race's own instances 1-5 it wins 36 of 120, up from 27.
+  * The algorithm itself is unchanged.
+
 * **On the landscape.** Each × is one evaluation. The last 10 of each optimizer are shown, fading with age. The ring marks each optimizer's best point so far. It never fades, and it glides to a new point only when a better one is found.
 * **The track.** Each optimizer's best f(x) − f_opt so far, on a log scale from 10 down to the finish line at 10⁻⁸ (COCO's final target).
 * **The finish.** The first to cross wins. When every optimizer on the track has finished, or after 1000 × D = 2000 evaluations, the next function starts.
