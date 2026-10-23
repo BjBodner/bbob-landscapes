@@ -216,7 +216,8 @@ function mount(el, o = {}) {
   function load(k, seed) {
     const name = fileOf(k, seed);
     if (!cache.has(name)) {
-      cache.set(name, fetch(base + "data/" + name).then(r => {
+      const v = (INDEX.races.find(r => r.file === name) || {}).v;   // content hash: a new recording is a new URL
+      cache.set(name, fetch(base + "data/" + name + (v ? "?v=" + v : "")).then(r => {
         if (!r.ok) throw new Error(`${name}: HTTP ${r.status}`);
         return r.json();
       }).then(decodeRace));
@@ -622,7 +623,7 @@ function mount(el, o = {}) {
   setPlaying(state.playing);
   setSpeed(1);
   readTheme();
-  fetch(base + "index.json").then(r => r.json()).then(ix => {
+  fetch(base + "index.json", { cache: "no-cache" }).then(r => r.json()).then(ix => {   // always revalidated
     INDEX = ix;
     if (ix.amm_note) q("[data-ammnote]").textContent = ix.amm_note;
     drawThumbs();

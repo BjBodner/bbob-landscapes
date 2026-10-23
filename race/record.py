@@ -429,12 +429,23 @@ def thumbnail(land: dict, size: int = 44) -> str:
     return b64(img)
 
 
+def stamp_page() -> None:
+    """Version race.html's script and style URLs by content, so browsers never keep stale copies."""
+    page = ROOT / "race.html"
+    html = page.read_text(encoding="utf-8")
+    for name in ("race.css", "bbob-meta.js", "landscape.js", "race.js"):
+        v = hashlib.sha256((ROOT / "src" / name).read_bytes()).hexdigest()[:12]
+        html = re.sub(rf'src/{re.escape(name)}(\?v=[0-9a-f]+)?"', f'src/{name}?v={v}"', html)
+    page.write_text(html, encoding="utf-8", newline="\n")
+
+
 def write_index() -> None:
     files = sorted(OUT.glob("f*_i*.json"), key=lambda p: tuple(map(int, re.findall(r"\d+", p.name))))
     races, thumbs = [], {}
     for p in files:
         d = json.loads(p.read_text())
-        races.append({"file": p.name, "function": d["function"], "instance": d["instance"],
+        races.append({"file": p.name, "v": hashlib.sha256(p.read_bytes()).hexdigest()[:12],
+                      "function": d["function"], "instance": d["instance"],
                       "finish": {n: r["finish"] for n, r in d["runs"].items()},
                       "best": {n: r["best"] for n, r in d["runs"].items()}})
         if d["instance"] == 1:
@@ -453,6 +464,7 @@ def write_index() -> None:
         "races": races,
     }
     (HERE / "index.json").write_text(json.dumps(index, indent=1), encoding="utf-8")
+    stamp_page()
     print(f"wrote {HERE / 'index.json'} ({len(races)} races)")
 
 
