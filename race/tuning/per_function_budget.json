@@ -1,0 +1,84 @@
+{
+ "rule": "per function, the AMM setting with the most race wins against all five competitors on the shown races (instances 1-5); ties broken by wins against SLSQP and HCMA, then median and total evaluations to 1e-8",
+ "candidates": "told budget B in 10..290 step 20 and 300..1000 step 50 (restarted with the same B), the 5-10-30-100 x D schedule, c46 with the whole budget",
+ "per_function": {
+  "1": {
+   "told": 10
+  },
+  "2": {
+   "told": 170
+  },
+  "3": {
+   "told": 450
+  },
+  "4": {
+   "told": 750
+  },
+  "5": {
+   "told": 10
+  },
+  "6": {
+   "told": 210
+  },
+  "7": {
+   "told": 650
+  },
+  "8": {
+   "told": 210
+  },
+  "9": {
+   "told": 210
+  },
+  "10": {
+   "told": 500
+  },
+  "11": {
+   "told": 170
+  },
+  "12": {
+   "told": 250
+  },
+  "13": {
+   "told": 190
+  },
+  "14": {
+   "told": 150
+  },
+  "15": {
+   "told": 150
+  },
+  "16": {
+   "told": 800
+  },
+  "17": {
+   "schedule": [
+    5,
+    10,
+    30,
+    100
+   ],
+   "warm": true
+  },
+  "18": {
+   "told": 800
+  },
+  "19": {
+   "told": 350
+  },
+  "20": {
+   "told": 270
+  },
+  "21": {
+   "told": 90
+  },
+  "22": {
+   "told": 90
+  },
+  "23": {
+   "told": 800
+  },
+  "24": {
+   "told": 550
+  }
+ }
+}

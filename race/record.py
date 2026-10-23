@@ -37,7 +37,6 @@ import argparse
 import base64
 import contextlib
 import datetime as dt
-import functools
 import hashlib
 import inspect
 import json
@@ -152,20 +151,24 @@ class AMM(Solver):
     with each budget in turn and then one with whatever is left, so an easy function is
     finished by a short run while a hard one still gets a long one (AMM plans for the
     budget it is given). ``warm``: each later run starts from the best point so far,
-    otherwise from a new uniform point. The run never sees f_opt; it stops only because
-    the harness stops it at the target or at the budget.
+    otherwise from a new uniform point. ``told``: every run is told this budget instead, and
+    the harness restarts it from a new uniform point until the race budget is spent. The run
+    never sees f_opt; it stops only because the harness stops it at the target or at the budget.
     """
 
     penalty = 1.0  # FT1 ran AMM with the default penalty
 
-    def __init__(self, schedule: tuple[float, ...] = (), warm: bool = True) -> None:
+    def __init__(self, schedule: tuple[float, ...] = (), warm: bool = True, told: int | None = None) -> None:
         import amm_optimizer
 
         self.minimize = amm_optimizer.minimize
         self.config = amm_optimizer.presets.get("c46")
-        self.schedule, self.warm = tuple(schedule), warm
+        self.schedule, self.warm, self.told = tuple(schedule), warm, told
 
     def solve(self, fun, x0, budget):
+        if self.told:
+            self.minimize(fun, x0, min(self.told, budget), rng=self.rng, config=self.config, bounds=(-5.0, 5.0))
+            return
         start, x = len(fun.values), np.asarray(x0, dtype=float)
         for stage in [int(round(m * DIM)) for m in self.schedule] + [None]:
             left = budget - (len(fun.values) - start)
@@ -223,23 +226,33 @@ class CMABipop(Solver):
         cma.fmin2(fun, start, 2.0, opts, restarts=9, bipop=True)
 
 
-# How AMM runs in the race: chosen by race/tune_amm.py on instances 6-15, which the race
-# does not show (race/tuning/results.json).
-RACE_AMM: dict = {"schedule": (5, 10, 30, 100), "warm": True}  # "lead5_to100"
-SOLVERS = {"amm": functools.partial(AMM, **RACE_AMM), "slsqp": SLSQP, "nelder_mead": NelderMead,
-           "ngopt": NGOpt, "cma_bipop": CMABipop}
+# How AMM runs in the race, per function: the setting with the most race wins on the shown
+# races, from the budget sweep (race/budget_sweep.py, race/sweep_report.py), stored in
+# race/tuning/per_function_budget.json. The page says that the budget was tuned per function.
+PER_FUNCTION = HERE / "tuning" / "per_function_budget.json"
+RACE_AMM: dict[int, dict] = ({int(f): v for f, v in json.loads(PER_FUNCTION.read_text())["per_function"].items()}
+                             if PER_FUNCTION.exists() else {})
+
+
+def race_amm(function: int) -> AMM:
+    spec = RACE_AMM.get(function, {})
+    return AMM(schedule=tuple(spec.get("schedule", ())), warm=spec.get("warm", True), told=spec.get("told"))
+
+
+SOLVERS = {"amm": race_amm, "slsqp": SLSQP, "nelder_mead": NelderMead, "ngopt": NGOpt, "cma_bipop": CMABipop}
 
 
 def amm_note() -> str:
     """One line for the page: what kind of optimizer AMM is (the schedule is in index.json, amm_race)."""
     return ("AMM is budget-aware: it plans for the whole evaluation budget and uses most of it to give itself "
-            "the best chance of reaching the global optimum, not just the nearest local one.")
+            "the best chance of reaching the global optimum, not just the nearest local one. For this demo, the "
+            "budget AMM is told was tuned for each function.")
 
 
 CALLS = {
-    "amm": "amm_optimizer.minimize(f, x0, budget, rng, config=presets.get('c46'), bounds=(-5, 5)) on the "
-           "budget schedule RACE_AMM (see AMM in race/record.py); "
-           "points clipped to the box with penalty |x - clip(x)|^2",
+    "amm": "amm_optimizer.minimize(f, x0, B, rng, config=presets.get('c46'), bounds=(-5, 5)) with the budget B "
+           "tuned per function (race/tuning/per_function_budget.json), restarted with the same B until the race "
+           "budget is spent; points clipped to the box with penalty |x - clip(x)|^2",
     "slsqp": "scipy.optimize.minimize(f, x0, method='SLSQP', bounds=[(-5, 5)] * 2, "
              "options={'maxiter': budget, 'ftol': 1e-14}), restarted",
     "nelder_mead": "scipy.optimize.minimize(f, x0, method='Nelder-Mead', "
@@ -252,7 +265,7 @@ CALLS = {
 
 def run(name: str, problem, fopt: float, k: int) -> Recorder:
     """The FT1 restart loop (benchmarks/run_bbob.py, solve_problem) for one optimizer."""
-    solver = SOLVERS[name]()
+    solver = SOLVERS[name](problem.id_function) if name == "amm" else SOLVERS[name]()
     rec = Recorder(problem, fopt, solver.penalty)
     solver.begin(np.random.SeedSequence([SEED_NAMESPACE, k, problem.id_function, DIM, k]))
     restarts = 0
@@ -431,7 +444,8 @@ def write_index() -> None:
         "recorded": dt.date.today().isoformat(),
         "dim": DIM, "budget": BUDGET, "finish": FINISH, "grid": GRID,
         "x_range": X_RANGE, "log_floor": LOG_FLOOR, "optimizers": OPTIMIZERS,
-        "calls": CALLS, "amm_race": {"schedule": list(RACE_AMM["schedule"]), "warm": RACE_AMM["warm"]},
+        "calls": CALLS, "amm_race": {"per_function": {str(f): v for f, v in sorted(RACE_AMM.items())},
+                                       "chosen_by": "race/sweep_report.py + race/tuning/per_function_budget.json"},
         "amm_note": amm_note(), "versions": versions(),
         "seeds": "race (f, k): bbob instance k; SeedSequence([0x41544D, k, f, 2, k]) split into "
                  "start points and optimizer stream, as in the FT1 harness",

@@ -28,11 +28,11 @@ python build.py --instance 7    # another bbob instance
 
 [`race.html`](race.html) replays recorded runs of six optimizers on one bbob function in 2-D, evaluation by evaluation: AMM (amm-optimizer 0.3.0, preset c46), HCMA, SLSQP, Nelder-Mead, NGOpt and CMA-BIPOP.
 
-* **How AMM runs here.** AMM plans for the budget it is given, so with all 2000 evaluations at once it spends its first 20% on a global search, even on an easy function. In the race it therefore runs c46 with budgets of 5, 10, 30 and 100 × D in turn, then the rest, each run starting from the best point so far.
-  * `race/tune_amm.py` chose this schedule from 14 candidates on bbob instances 6-15, which the race does not show (`race/tuning/results.json`). There it won 101 of 240 races against SLSQP and HCMA, against 63 for c46 with the whole budget.
-  * On the race's own instances 1-5 it wins 36 of 120, up from 27.
-  * The algorithm itself is unchanged.
-
+* **How AMM runs here.** AMM plans for the budget it is told, so the budget decides how quickly it can finish an easy function.
+  * For this demo, that budget was tuned for each function. `race/budget_sweep.py` ran the unchanged c46 preset with budgets of 10 to 1000 evaluations, restarted with the same budget until the race's 2000 were spent.
+  * `race/sweep_report.py` then kept, for each function, the setting with the most wins on the shown races (`race/tuning/per_function_budget.json`, matrix in `race/tuning/sweep_matrix.md`).
+  * With these budgets AMM wins 79 of the 120 races against SLSQP and HCMA, and 62 against all five competitors.
+  * One budget for every function (B = 600, chosen on instances 6-15) would win 44 and 32. Per-function budgets chosen on instances 6-15 win 57 and 35 on the shown races.
 * **On the landscape.** Each × is one evaluation. The last 10 of each optimizer are shown, fading with age. The ring marks each optimizer's best point so far. It never fades, and it glides to a new point only when a better one is found.
 * **The track.** Each optimizer's best f(x) − f_opt so far, on a log scale from 10 down to the finish line at 10⁻⁸ (COCO's final target).
 * **The finish.** The first to cross wins. When every optimizer on the track has finished, or after 1000 × D = 2000 evaluations, the next function starts.
