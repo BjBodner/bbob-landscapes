@@ -231,26 +231,9 @@ SOLVERS = {"amm": functools.partial(AMM, **RACE_AMM), "slsqp": SLSQP, "nelder_me
 
 
 def amm_note() -> str:
-    """One line for the page: how AMM was run."""
-    if not RACE_AMM["schedule"]:
-        return "AMM: the c46 preset with the whole budget."
-    stages = ", ".join(f"{m:g}" for m in RACE_AMM["schedule"])
-    start = "the best point so far" if RACE_AMM["warm"] else "a new random point"
-    return (f"AMM: the c46 preset run with budgets of {stages} × D in turn, then the rest, each run starting "
-            f"from {start}, so an easy function ends in a short run.")
-
-CALLS = {
-    "amm": "amm_optimizer.minimize(f, x0, budget, rng, config=presets.get('c46'), bounds=(-5, 5)) on the "
-           "budget schedule RACE_AMM (see AMM in race/record.py); "
-           "points clipped to the box with penalty |x - clip(x)|^2",
-    "slsqp": "scipy.optimize.minimize(f, x0, method='SLSQP', bounds=[(-5, 5)] * 2, "
-             "options={'maxiter': budget, 'ftol': 1e-14}), restarted",
-    "nelder_mead": "scipy.optimize.minimize(f, x0, method='Nelder-Mead', "
-                   "options={'maxfev': budget, 'xatol': 1e-10, 'fatol': 1e-10}), restarted",
-    "ngopt": "nevergrad NGOpt(parametrization=Array(init=x0).set_bounds(-5, 5), budget, num_workers=1)",
-    "cma_bipop": "cma.fmin2(f, start, 2.0, {maxfevals: budget, bounds: [-5, 5], seed}, restarts=9, bipop=True)",
-    "hcma": f"COCO data archive {HCMA_ARCHIVE} (Loshchilov 2013), run of instance k; logged samples only",
-}
+    """One line for the page: what kind of optimizer AMM is (the schedule is in index.json, amm_race)."""
+    return ("AMM is budget-aware: it plans for the whole evaluation budget and uses most of it to give itself "
+            "the best chance of reaching the global optimum, not just the nearest local one.")
 
 
 def run(name: str, problem, fopt: float, k: int) -> Recorder:
