@@ -235,7 +235,23 @@
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: 3px 16px;
   font: 400 11.5px/1.5 var(--font-data); color: var(--muted); font-variant-numeric: tabular-nums;
 }
+.br-foot { position: relative; }
 .br-foot b { font-weight: 500; color: var(--ink); }
+.br-how summary {
+  list-style: none; cursor: pointer; color: var(--ink);
+  text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 2px;
+}
+.br-how summary::-webkit-details-marker { display: none; }
+.br-how summary:hover { text-decoration-color: var(--accent); }
+.br-how-body {
+  position: absolute; z-index: 6; left: 0; bottom: calc(100% + 8px); width: min(46ch, 100%);
+  padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--chip);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .16);
+  font: 400 12.5px/1.45 var(--font-ui); color: var(--ink); white-space: normal;
+}
+.br-how-body p { margin: 0; }
+.br-how-body p + p { margin-top: 6px; }
+.br-how-body a { color: var(--ink); }
 .br-foot a { color: var(--ink); text-decoration-color: var(--line); text-underline-offset: 2px; }
 .br-foot a:hover { text-decoration-color: var(--accent); }
 .bbob-race kbd {
