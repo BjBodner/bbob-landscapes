@@ -107,7 +107,7 @@ try {
     const [name, rest] = spec.split(/=(.*)/s);
     const [hash, steps = ""] = rest.split(/:(.*)/s);
     const loaded = cdp.once("Page.loadEventFired");
-    await cdp.send("Page.navigate", { url: pathToFileURL(resolve(ROOT, page)).href + `?shot=${encodeURIComponent(name)}` + (hash ? `#${hash}` : "") });
+    await cdp.send("Page.navigate", { url: (/^https?:/.test(page) ? page : pathToFileURL(resolve(ROOT, page)).href) + `?shot=${encodeURIComponent(name)}` + (hash ? `#${hash}` : "") });
     await loaded;
     await cdp.eval("document.fonts.ready.then(() => true)");
     await sleep(900);

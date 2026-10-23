@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Optimizer Race</title>
+<meta name="description" content="Six optimizers race to the optimum of the 24 bbob functions in 2-D: recorded runs replayed on the landscape, evaluation by evaluation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;500&family=STIX+Two+Text:ital,wght@1,500&display=swap">
+<link rel="stylesheet" href="src/race.css">
+<style>
+  html, body { height: 100%; margin: 0; }
+  body { background: #edf1f3; }
+  @media (prefers-color-scheme: dark) { body { background: #0c1318; } }
+  #race { height: 100%; height: 100dvh; }
+</style>
+</head>
+<body>
+<div id="race"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="src/bbob-meta.js"></script>
+<script src="src/landscape.js"></script>
+<script src="src/race.js"></script>
+<script>
+  window.__race = BBOBRace.mount(document.getElementById("race"), {
+    base: "race/", hash: true, keys: "global",
+    source: "https://github.com/BjBodner/bbob-landscapes",
+  });
+</script>
+</body>
+</html>

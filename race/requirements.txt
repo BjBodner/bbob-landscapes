@@ -1,0 +1,8 @@
+# The versions that recorded race/data (see race/index.json, "versions").
+amm-optimizer==0.3.0
+cma==4.5.0
+cocoex==2.8.2
+cocopp>=2.8          # only to locate the cached HCMA archive (no download with remote=False)
+nevergrad==1.0.12
+numpy==2.5.4
+scipy==1.18.1
