@@ -19,6 +19,7 @@ import argparse
 import base64
 import json
 import os
+import re
 import sys
 import tempfile
 from pathlib import Path
@@ -83,6 +84,11 @@ def landscape(problem, grid: int) -> dict:
     }
 
 
+def inline(text: str) -> str:
+    """Replace each /*__INLINE path__*/ marker with the file at that path (the page stays one file)."""
+    return re.sub(r"/\*__INLINE (\S+)__\*/", lambda m: (ROOT / m.group(1)).read_text(encoding="utf-8"), text)
+
+
 def build(instance: int, grid: int) -> dict:
     import cocoex
 
@@ -107,7 +113,7 @@ def main(argv: list[str] | None = None) -> None:
 
     data = build(args.instance, args.grid)
     payload = json.dumps(data, separators=(",", ":"))
-    fragment = TEMPLATE.read_text(encoding="utf-8").replace("__LANDSCAPES__", payload)
+    fragment = inline(TEMPLATE.read_text(encoding="utf-8")).replace("__LANDSCAPES__", payload)
     head, body = fragment.split(BODY_START, 1)
     page = (
         '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
