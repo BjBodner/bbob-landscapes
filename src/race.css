@@ -237,12 +237,17 @@
 }
 .br-foot { position: relative; }
 .br-foot b { font-weight: 500; color: var(--ink); }
-.br-how summary {
-  list-style: none; cursor: pointer; color: var(--ink);
-  text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 2px;
-}
+.br-how summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; }
 .br-how summary::-webkit-details-marker { display: none; }
-.br-how summary:hover { text-decoration-color: var(--accent); }
+.br-info {
+  display: inline-grid; place-items: center; width: 14px; height: 14px; border-radius: 50%;
+  border: 1px solid var(--muted); color: var(--muted);
+  font: italic 600 9.5px/1 var(--font-math);
+}
+.br-how summary:hover .br-info, .br-how[open] .br-info { border-color: var(--ink); color: var(--ink); }
+.bbob-race .br-vh {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
 .br-how-body {
   position: absolute; z-index: 6; left: 0; bottom: calc(100% + 8px); width: min(46ch, 100%);
   padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--chip);

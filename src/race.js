@@ -103,7 +103,7 @@ function mount(el, o = {}) {
     <p class="br-sr" data-live aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
     <footer class="br-foot">
       <span data-raceline></span>
-      <details class="br-how" data-how><summary>How this race was run</summary>
+      <details class="br-how" data-how><summary title="How this race was run"><span class="br-info" aria-hidden="true">i</span><span class="br-vh">How this race was run</span></summary>
         <div class="br-how-body">
           <p data-runsnote>Single recorded runs, one per optimizer; an illustration, not a benchmark.</p>
           <p data-ammnote></p>
