@@ -353,8 +353,9 @@ function create(opts) {
     const cw = Math.round(w * dpr), ch = Math.round(h * dpr);
     if (canvas.width !== cw || canvas.height !== ch) { canvas.width = cw; canvas.height = ch; }
     const s = Math.min(w, h) / (2 * 1.5) / S.zoom;
+    ctx2d.setTransform(1, 0, 0, 1, 0, 0);
+    ctx2d.clearRect(0, 0, canvas.width, canvas.height);
     ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx2d.clearRect(0, 0, w, h);
     ctx2d.translate(w / 2, h / 2); ctx2d.rotate(-S.angle); ctx2d.scale(s, s);
     ctx2d.imageSmoothingEnabled = true;
     ctx2d.drawImage(image2d, -1, -1, 2, 2);
@@ -507,8 +508,9 @@ function create(opts) {
     if (overlay) {
       const cw = Math.round(w * dpr), ch = Math.round(h * dpr);
       if (overlay.width !== cw || overlay.height !== ch) { overlay.width = cw; overlay.height = ch; }
+      octx.setTransform(1, 0, 0, 1, 0, 0);   // clear every device pixel: w * dpr can fall short of the rounded size
+      octx.clearRect(0, 0, overlay.width, overlay.height);
       octx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      octx.clearRect(0, 0, w, h);
       opts.overlay(octx, project, w, h);
     }
   }
