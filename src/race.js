@@ -23,12 +23,12 @@
 
 const B = root.BBOBLandscape, M = root.BBOB_META;
 const OPTIMIZERS = [
-  { id: "hcma", name: "HCMA" },
-  { id: "slsqp", name: "SLSQP" },
-  { id: "nelder_mead", name: "Nelder-Mead" },
-  { id: "ngopt", name: "NGOpt" },
-  { id: "cma_bipop", name: "CMA-BIPOP" },
-  { id: "amm", name: "AMM (Ours)" },
+  { id: "hcma", name: "HCMA", short: "HCMA" },
+  { id: "slsqp", name: "SLSQP", short: "SLSQP" },
+  { id: "nelder_mead", name: "Nelder-Mead", short: "N-M" },
+  { id: "ngopt", name: "NGOpt", short: "NGOpt" },
+  { id: "cma_bipop", name: "CMA-BIPOP", short: "BIPOP" },
+  { id: "amm", name: "AMM (Ours)", short: "AMM" },
 ];
 const DEFAULT_ON = ["amm", "slsqp", "hcma"];
 const TRAIL = 10;                      // samples shown per optimizer
@@ -69,32 +69,8 @@ function mount(el, o = {}) {
         <h2 class="br-title"><span class="fsym" data-fsym><i>f</i><sub></sub></span><span class="fname" data-fname></span></h2>
       </div>
       <ul class="br-pills" data-pills aria-label="Classification"></ul>
+      <p class="br-goal"><b>The goal:</b> reach the global minimum <span class="br-goal-star" aria-hidden="true">★</span>. The first optimizer whose best point gets within 10<sup>−8</sup> of it wins.</p>
     </header>
-    <div class="br-bar">
-      <div class="br-ctl" role="group" aria-label="Optimizers in the race"><span class="br-lab">Race</span>${
-        OPTIMIZERS.map(m => `<button type="button" class="br-opt" data-o="${m.id}" style="--oc: var(--r-${m.id})" aria-pressed="false"><i aria-hidden="true"></i>${m.name}</button>`).join("")}</div>
-      <div class="br-ctl" role="group" aria-label="Seed"><span class="br-lab">Seed</span><div class="br-seg" data-seeds>${
-        [1, 2, 3, 4, 5].map(s => `<button type="button" data-s="${s}" aria-pressed="false" aria-label="Seed ${s}">${s}</button>`).join("")}</div></div>
-      <div class="br-ctl" role="group" aria-label="Playback">
-        <button type="button" class="br-tbtn" data-play aria-pressed="true"><svg viewBox="0 0 12 12" aria-hidden="true" data-play-icon></svg><span data-play-label>Pause</span></button>
-        <button type="button" class="br-tbtn" data-restart aria-label="Restart this race (R)"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.5a4.5 4.5 0 1 1-4.3 3.2l1.4.4A3 3 0 1 0 6 3v1.6L3.2 2.3 6 0z"/></svg>Restart</button>
-        <div class="br-seg" data-speeds aria-label="Speed">${SPEEDS.map(v => `<button type="button" data-v="${v}" aria-pressed="false">${v === 0.5 ? "½" : v}×</button>`).join("")}</div>
-      </div>
-      <div class="br-ctl">
-        <div class="br-seg" role="group" aria-label="View"><button type="button" data-view="heat" aria-pressed="true">Heat map</button><button type="button" data-view="elevation" aria-pressed="false">Elevation</button></div>
-        <div class="br-seg" role="group" aria-label="Landscape colours"><button type="button" data-cmap="muted" aria-pressed="true">Muted</button><button type="button" data-cmap="atlas" aria-pressed="false">Atlas colours</button></div>
-        <button type="button" class="br-tbtn" data-optimum aria-pressed="true"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 .8l1.5 3.6 3.7.3-2.8 2.4.9 3.7L6 8.8 2.7 10.8l.9-3.7L.8 4.7l3.7-.3z"/></svg>Optimum</button>
-      </div>
-    </div>
-    <div class="br-track" data-track role="group" aria-label="Race track: each optimizer's best f(x) − f_opt so far, on a log scale from 10 down to the finish line at 10⁻⁸">
-      <div class="br-scale-title">best f − f<sub>opt</sub></div>
-      <div class="br-scale" data-scale aria-hidden="true"></div>
-      <div class="br-flagcell" aria-hidden="true">${FLAG}</div>
-      ${OPTIMIZERS.map(m => `<div class="br-row" data-row="${m.id}" style="display:contents; --oc: var(--r-${m.id})">
-        <div class="br-lname"><i aria-hidden="true"></i><span class="nm">${m.name}</span><span class="place" hidden></span><span class="val"></span></div>
-        <div class="br-lane" aria-hidden="true"><div class="br-run"></div></div>
-        <div class="br-lend"></div></div>`).join("")}
-    </div>
     <div class="br-view" data-stage>
       <div class="br-axes" data-axes></div>
       <div class="br-clock" data-clock aria-hidden="true"></div>
@@ -116,6 +92,35 @@ function mount(el, o = {}) {
       ${o.source ? `<span><a href="${o.source}" target="_blank" rel="noopener">Source code and data</a> · functions from <a href="https://github.com/numbbo/coco" target="_blank" rel="noopener">COCO</a></span>` : ""}
     </footer>
   </div>
+  <aside class="br-side" aria-label="Race controls and track">
+    <div class="br-sec" role="group" aria-label="Optimizers in the race"><span class="br-lab">Racers</span><div class="br-opts">${
+      OPTIMIZERS.map(m => `<button type="button" class="br-opt" data-o="${m.id}" style="--oc: var(--r-${m.id})" aria-pressed="false"><i aria-hidden="true"></i>${m.name}</button>`).join("")}</div></div>
+    <div class="br-sec br-inline" role="group" aria-label="Seed"><span class="br-lab">Seed</span><div class="br-seg" data-seeds>${
+      [1, 2, 3, 4, 5].map(s => `<button type="button" data-s="${s}" aria-pressed="false" aria-label="Seed ${s}">${s}</button>`).join("")}</div></div>
+    <div class="br-sec br-inline" role="group" aria-label="Playback">
+      <button type="button" class="br-tbtn" data-play aria-pressed="true"><svg viewBox="0 0 12 12" aria-hidden="true" data-play-icon></svg><span data-play-label>Pause</span></button>
+      <button type="button" class="br-tbtn" data-restart aria-label="Restart this race (R)"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.5a4.5 4.5 0 1 1-4.3 3.2l1.4.4A3 3 0 1 0 6 3v1.6L3.2 2.3 6 0z"/></svg>Restart</button>
+      <div class="br-seg" data-speeds aria-label="Speed">${SPEEDS.map(v => `<button type="button" data-v="${v}" aria-pressed="false">${v === 0.5 ? "½" : v}×</button>`).join("")}</div>
+    </div>
+    <div class="br-sec br-inline">
+      <div class="br-seg" role="group" aria-label="View"><button type="button" data-view="heat" aria-pressed="true">Heat map</button><button type="button" data-view="elevation" aria-pressed="false">Elevation</button></div>
+      <div class="br-seg" role="group" aria-label="Landscape colours"><button type="button" data-cmap="atlas" aria-pressed="true">Atlas</button><button type="button" data-cmap="muted" aria-pressed="false">Muted</button></div>
+      <button type="button" class="br-tbtn" data-optimum aria-pressed="true" title="Show the global minimum"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 .8l1.5 3.6 3.7.3-2.8 2.4.9 3.7L6 8.8 2.7 10.8l.9-3.7L.8 4.7l3.7-.3z"/></svg>Goal</button>
+    </div>
+    <div class="br-vtrack" data-track role="group" aria-label="Race track: each optimizer's distance to the global minimum, best f(x) − f_opt so far on a log scale, from 10 at the top to the finish line at 10⁻⁸ at the bottom">
+      <div class="br-vt-title">Distance to the global minimum <span>(best f − f<sub>opt</sub>)</span></div>
+      <div class="br-vt-body">
+        <div class="br-vscale" aria-hidden="true"><div class="sp-top"></div><div class="ticks" data-scale></div><div class="sp-bot"></div></div>
+        ${OPTIMIZERS.map(m => `<div class="br-col" data-row="${m.id}" style="--oc: var(--r-${m.id})" title="${m.name}">
+          <div class="br-col-name">${m.short}</div>
+          <div class="br-col-val val">–</div>
+          <div class="br-col-rail" aria-hidden="true"><div class="br-run"></div></div>
+          <div class="br-col-end"><span class="place" hidden></span><span class="br-lend"></span></div>
+        </div>`).join("")}
+      </div>
+      <div class="br-vt-finish">${FLAG}<span><b>Finish</b>: within 10<sup>−8</sup> of the global minimum</span></div>
+    </div>
+  </aside>
 </div>`;
   const q = s => el.querySelector(s), qa = s => [...el.querySelectorAll(s)];
   const how = q("[data-how]");   // the setup popover closes on a click elsewhere or on Escape
@@ -124,7 +129,7 @@ function mount(el, o = {}) {
 
   /* ---------- state ---------- */
   const state = {
-    k: 0, seed: 1, view: "heat", cmap: "muted", optimum: true,
+    k: 0, seed: 1, view: "heat", cmap: "atlas", optimum: true,
     playing: o.autoplay !== false && !reduceMotion, speed: 1,
     clock: 0, phase: "loading", holdUntil: 0, inView: true,
   };
@@ -132,6 +137,7 @@ function mount(el, o = {}) {
   const disp = {};
   const cache = new Map();
   const colours = {}, outlines = {};
+  let fontUI = "system-ui, sans-serif";
   let confetti = [];
 
   /* ---------- colours ---------- */
@@ -153,6 +159,7 @@ function mount(el, o = {}) {
       outlines[m.id] = luminance(c) > .4 ? "#0c1318" : "#ffffff";
     }
     colours.pin = hexOf(cs.getPropertyValue("--pin").trim() || "#13212b");
+    fontUI = cs.getPropertyValue("--font-ui").trim() || "system-ui, sans-serif";
     colours.stage = hexOf(cs.getPropertyValue("--stage").trim() || "#f8fafb");
     const stops = cs.getPropertyValue("--muted-map").split(",").map(s => hexOf(s.trim())).filter(Boolean);
     luts.muted = B.ramp(stops.length > 1 ? stops : ["#f5f7f8", "#9eabb3"]);
@@ -371,14 +378,14 @@ function mount(el, o = {}) {
 
   /* ---------- the track ---------- */
   const scale = q("[data-scale]");
-  function drawScale() {   // a label per decade, every other one counted from the finish when narrow
-    const w = scale.clientWidth, n = LOG_START - LOG_FINISH, stride = w / n < 34 ? 2 : 1;
+  function drawScale() {   // a label per decade (every other one, counted from the finish, when short)
+    const h = scale.clientHeight, n = LOG_START - LOG_FINISH, stride = h / n < 17 ? 2 : 1;
     let html = "";
     for (let e = LOG_START; e >= LOG_FINISH; e--) {
       if (e !== LOG_START && (e - LOG_FINISH) % stride) continue;
       if (e !== LOG_START && stride > 1 && e - LOG_FINISH === n - 1) continue;   // too close to the start label
       const p = (LOG_START - e) / n;
-      html += `<span style="left:${(100 * p).toFixed(2)}%">${e === LOG_START ? "≥" : ""}10${B.sup(e)}</span>`;
+      html += `<span style="top:${(100 * p).toFixed(2)}%">${e === LOG_START ? "≥" : ""}10${B.sup(e)}</span>`;
     }
     scale.innerHTML = html;
   }
@@ -435,12 +442,12 @@ function mount(el, o = {}) {
   }
 
   /* ---------- drawing: samples, best rings, the optimum, confetti ---------- */
-  function cross(ctx, x, y, s, col, out) {
+  function cross(ctx, x, y, s, col, out, lw = 2) {
     ctx.beginPath();
     ctx.moveTo(x - s, y - s); ctx.lineTo(x + s, y + s);
     ctx.moveTo(x - s, y + s); ctx.lineTo(x + s, y - s);
-    ctx.strokeStyle = out; ctx.lineWidth = 4.2; ctx.stroke();
-    ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
+    ctx.strokeStyle = out; ctx.lineWidth = lw + 2.2; ctx.stroke();
+    ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.stroke();
   }
   function star(ctx, x, y, r, col, out) {
     ctx.beginPath();
@@ -458,34 +465,71 @@ function mount(el, o = {}) {
   function drawOverlay(ctx, project, w, h) {
     if (race) {
       ctx.lineCap = "round";
-      if (state.optimum) {
+      const labels = [], rings = [], todo = [];   // labels are drawn last, on top, and never overlap
+      const overlaps = (x, w, top, hgt) =>
+        labels.some(b => x - w / 2 < b.x + b.w / 2 && x + w / 2 > b.x - b.w / 2 && top < b.top + b.h && top + hgt > b.top) ||
+        rings.some(c => Math.max(Math.abs(x - c.x) - w / 2, 0) ** 2 + Math.max(top - c.y, c.y - (top + hgt), 0) ** 2 < (c.r + 2) ** 2);
+      function label(text, x, y, size, weight, col, out, dir = -1) {   // dir -1: above y, +1: below y
+        ctx.font = `${weight} ${size}px ${fontUI}`;
+        const w = ctx.measureText(text).width, hgt = size + 2;
+        let top = dir < 0 ? y - hgt : y;
+        for (let tries = 0; tries < 12 && overlaps(x, w, top, hgt); tries++) top += dir * (hgt / 2 + 1);
+        labels.push({ x, w, top, h: hgt });
+        ctx.globalAlpha = 1;
+        ctx.textAlign = "center"; ctx.textBaseline = "top";
+        ctx.lineJoin = "round"; ctx.lineWidth = 3.5; ctx.strokeStyle = out;
+        ctx.strokeText(text, x, top);
+        ctx.fillStyle = col; ctx.fillText(text, x, top);
+      }
+      let goal = null;
+      if (state.optimum) {   // the goal: the global minimum
         const [px, py] = project(race.land.x_opt[0], race.land.x_opt[1]);
-        ctx.globalAlpha = .9;
-        star(ctx, px, py, 7, colours.pin, colours.stage);
+        ctx.globalAlpha = .95;
+        star(ctx, px, py, 8, colours.pin, colours.stage);
+        goal = [px, py];
       }
       const shown = OPTIMIZERS.filter(m => on.has(m.id));
-      for (const m of shown) {   // samples, oldest first
-        const run = race.runs[m.id], d = disp[m.id];
+      for (const m of shown) {   // samples, oldest first; AMM's are larger
+        const run = race.runs[m.id], d = disp[m.id], big = m.id === "amm";
         for (let j = Math.max(0, d.m - TRAIL); j < d.m; j++) {
           let x = run.x[2 * j], y = run.x[2 * j + 1], a = 1 - (d.m - 1 - j) / TRAIL;
           if (Math.abs(x) > DOMAIN || Math.abs(y) > DOMAIN) { x = clampD(x); y = clampD(y); a *= .5; }
           const [px, py] = project(x, y);
           ctx.globalAlpha = a;
-          cross(ctx, px, py, 5, colours[m.id], outlines[m.id]);
+          cross(ctx, px, py, big ? 7 : 5, colours[m.id], outlines[m.id], big ? 2.8 : 2);
         }
       }
       const tnow = performance.now();
-      shown.forEach((m, i) => {   // best rings: full strength, nested so they stay visible together
-        const d = disp[m.id];
-        if (!d.ring) return;
-        const g = d.ring, u = reduceMotion ? 1 : ease(Math.min(1, (tnow - g.t0) / GLIDE_MS));
-        const x = g.fx + (g.tx - g.fx) * u, y = g.fy + (g.ty - g.fy) * u;
-        const [px, py] = project(clampD(x), clampD(y)), r = 7 + 3.2 * i;
+      const at = id => {   // the best point's screen position, gliding after an improvement
+        const g = disp[id].ring, u = reduceMotion ? 1 : ease(Math.min(1, (tnow - g.t0) / GLIDE_MS));
+        return project(clampD(g.fx + (g.tx - g.fx) * u), clampD(g.fy + (g.ty - g.fy) * u));
+      };
+      const rivals = shown.filter(m => m.id !== "amm" && disp[m.id].ring);
+      const amm = shown.find(m => m.id === "amm" && disp[m.id].ring);
+      rivals.forEach((m, i) => {   // the others' best rings, nested so they stay visible together
+        const [px, py] = at(m.id), r = 7 + 3 * i;
         ctx.globalAlpha = 1;
         ctx.beginPath(); ctx.arc(px, py, r, 0, 2 * Math.PI);
         ctx.strokeStyle = outlines[m.id]; ctx.lineWidth = 5; ctx.stroke();
         ctx.strokeStyle = colours[m.id]; ctx.lineWidth = 2.6; ctx.stroke();
+        rings.push({ x: px, y: py, r });
+        todo.push([m.short, px, py - r - 3, 10, 650, colours[m.id], outlines[m.id]]);
       });
+      if (amm) {   // AMM's bull's-eye on top of every ring, and its label placed first
+        const [px, py] = at("amm"), c = colours.amm, o = outlines.amm;
+        ctx.globalAlpha = 1;
+        for (const [r, lw] of [[14, 2.8], [8.5, 2.6]]) {
+          ctx.beginPath(); ctx.arc(px, py, r, 0, 2 * Math.PI);
+          ctx.strokeStyle = o; ctx.lineWidth = lw + 2.6; ctx.stroke();
+          ctx.strokeStyle = c; ctx.lineWidth = lw; ctx.stroke();
+        }
+        ctx.beginPath(); ctx.arc(px, py, 3.4, 0, 2 * Math.PI);
+        ctx.fillStyle = c; ctx.fill(); ctx.strokeStyle = o; ctx.lineWidth = 1.5; ctx.stroke();
+        rings.push({ x: px, y: py, r: 14 });
+        todo.unshift(["AMM", px, py - 17, 13, 800, c, o]);
+      }
+      for (const a of todo) label(...a);
+      if (goal) label("global minimum", goal[0], goal[1] + 10, 10.5, 600, colours.pin, colours.stage, 1);
     }
     if (confetti.length) {
       const dt = frameDt;
