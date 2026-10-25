@@ -158,11 +158,14 @@ class AMM(Solver):
 
     penalty = 1.0  # FT1 ran AMM with the default penalty
 
-    def __init__(self, schedule: tuple[float, ...] = (), warm: bool = True, told: int | None = None) -> None:
+    def __init__(self, schedule: tuple[float, ...] = (), warm: bool = True, told: int | None = None,
+                 anytime: str = "off") -> None:
         import amm_optimizer
 
         self.minimize = amm_optimizer.minimize
-        self.config = amm_optimizer.presets.get("c46")
+        # anytime="replay": AMM's anytime mode (needs a source tree that has Variant.anytime)
+        self.config = (amm_optimizer.presets.get("c46") if anytime == "off"
+                       else amm_optimizer.presets.with_changes("c46", anytime=anytime))
         self.schedule, self.warm, self.told = tuple(schedule), warm, told
 
     def solve(self, fun, x0, budget):
@@ -232,9 +235,15 @@ class CMABipop(Solver):
 PER_FUNCTION = HERE / "tuning" / "per_function_budget.json"
 RACE_AMM: dict[int, dict] = ({int(f): v for f, v in json.loads(PER_FUNCTION.read_text())["per_function"].items()}
                              if PER_FUNCTION.exists() else {})
+# race/tuning/amm_race.json {"anytime": "replay"}: AMM runs in its anytime mode with the race
+# budget, and the per-function budgets above are not used.
+MODE_FILE = HERE / "tuning" / "amm_race.json"
+RACE_MODE: dict = json.loads(MODE_FILE.read_text()) if MODE_FILE.exists() else {}
 
 
 def race_amm(function: int) -> AMM:
+    if RACE_MODE.get("anytime", "off") != "off":
+        return AMM(anytime=RACE_MODE["anytime"])
     spec = RACE_AMM.get(function, {})
     return AMM(schedule=tuple(spec.get("schedule", ())), warm=spec.get("warm", True), told=spec.get("told"))
 
@@ -244,6 +253,10 @@ SOLVERS = {"amm": race_amm, "slsqp": SLSQP, "nelder_mead": NelderMead, "ngopt": 
 
 def amm_note() -> str:
     """One line for the page: what kind of optimizer AMM is (the schedule is in index.json, amm_race)."""
+    if RACE_MODE.get("anytime", "off") != "off":
+        return ("AMM is budget-aware: it plans for the evaluations it has. Here it runs in its anytime mode, which "
+                "plans 10 × D evaluations first and doubles the plan as the run goes on, so it never needs to be "
+                "told the budget.")
     return ("AMM is budget-aware: it plans for the whole evaluation budget and uses most of it to give itself "
             "the best chance of reaching the global optimum, not just the nearest local one. For this demo, the "
             "budget AMM is told was tuned for each function.")
@@ -261,6 +274,12 @@ CALLS = {
     "cma_bipop": "cma.fmin2(f, start, 2.0, {maxfevals: budget, bounds: [-5, 5], seed}, restarts=9, bipop=True)",
     "hcma": f"COCO data archive {HCMA_ARCHIVE} (Loshchilov 2013), run of instance k; logged samples only",
 }
+
+
+if RACE_MODE.get("anytime", "off") != "off":
+    CALLS["amm"] = (f"amm_optimizer.minimize(f, x0, budget, rng, config=presets.with_changes('c46', "
+                    f"anytime='{RACE_MODE['anytime']}'), bounds=(-5, 5)) with the race budget (no budget chosen "
+                    "per function); points clipped to the box with penalty |x - clip(x)|^2")
 
 
 def run(name: str, problem, fopt: float, k: int, rep: int = 0) -> Recorder:
@@ -411,8 +430,12 @@ def versions() -> dict:
 
     import amm_optimizer
 
+    race_config = (amm_optimizer.presets.with_changes("c46", anytime=RACE_MODE["anytime"])
+                   if RACE_MODE.get("anytime", "off") != "off" else amm_optimizer.presets.get("c46"))
     return {"amm_optimizer": amm_optimizer.__version__,
             "amm_config_hash": amm_optimizer.presets.get("c46").config_hash(),
+            "amm_race_config_hash": race_config.config_hash(),
+            **({"amm_source": RACE_MODE["source"]} if "source" in RACE_MODE else {}),
             "cma": cma.__version__, "cocoex": cocoex.__version__, "nevergrad": nevergrad.__version__,
             "scipy": scipy.__version__, "numpy": np.__version__, "python": platform.python_version()}
 
@@ -478,7 +501,8 @@ def write_index() -> None:
         "recorded": dt.date.today().isoformat(),
         "dim": DIM, "budget": BUDGET, "finish": FINISH, "grid": GRID,
         "x_range": X_RANGE, "log_floor": LOG_FLOOR, "optimizers": OPTIMIZERS,
-        "calls": CALLS, "amm_race": {"per_function": {str(f): v for f, v in sorted(RACE_AMM.items())},
+        "calls": CALLS, "amm_race": {**RACE_MODE} if RACE_MODE.get("anytime", "off") != "off" else
+                    {"per_function": {str(f): v for f, v in sorted(RACE_AMM.items())},
                                        "chosen_by": "race/sweep_report.py + race/tuning/per_function_budget.json"},
         "amm_note": amm_note(), "runs_note": runs_note(races), "versions": versions(),
         "seeds": "race (f, k): bbob instance k; SeedSequence([0x41544D, k, f, 2, k]) split into "

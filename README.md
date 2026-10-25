@@ -26,17 +26,20 @@ python build.py --instance 7    # another bbob instance
 
 ## Optimizer Race
 
-[`race.html`](race.html) replays recorded runs of six optimizers on one bbob function in 2-D, evaluation by evaluation: AMM (amm-optimizer 0.3.0, preset c46), HCMA, SLSQP, Nelder-Mead, NGOpt and CMA-BIPOP.
+[`race.html`](race.html) replays recorded runs of six optimizers on one bbob function in 2-D, evaluation by evaluation: AMM (preset c46 in its anytime mode), HCMA, SLSQP, Nelder-Mead, NGOpt and CMA-BIPOP. The animation starts at f15; its automatic sequence runs f15 to f24 and wraps back to f15. The first 14 functions finish within a few dozen evaluations, but they can still be picked from the index.
 
-* **How AMM runs here.** AMM plans for the budget it is told, so the budget decides how quickly it can finish an easy function.
-  * For this demo, that budget was tuned for each function. `race/budget_sweep.py` ran the unchanged c46 preset with budgets of 10 to 1000 evaluations, restarted with the same budget until the race's 2000 were spent.
-  * `race/sweep_report.py` then kept, for each function, the setting with the most wins on the shown races (`race/tuning/per_function_budget.json`, matrix in `race/tuning/sweep_matrix.md`).
-  * With these budgets AMM wins 79 of the 120 races against SLSQP and HCMA, and 62 against all five competitors, every optimizer running once.
-  * On top of that, `race/joint_opt.py` picks each function's budget and each race's seed together. For each function, the 8 best budgets of the sweep are tried; for each race, AMM's best of 100 random seeds is kept, ignoring any run that reaches 1e-8 in fewer than 4 evaluations.
-  * Every other optimizer ran once (HCMA: its single archived run).
-  * With this selection AMM wins 114 of the 120 races against SLSQP and HCMA, and 112 against all five.
-  * For comparison: with one run each, AMM wins 79. If SLSQP is also given its best of 100 seeds, SLSQP wins 76 and AMM 44.
-  * One budget for every function (B = 600, chosen on instances 6-15) would win 44 and 32. Per-function budgets chosen on instances 6-15 win 57 and 35 on the shown races.
+* **How AMM runs here.** AMM plans for the budget it is told.
+  * In the race it runs c46 in its anytime mode (`variant.anytime="replay"`; AMM's research code at 5df4ef6b, docs/ANYTIME.md, not yet in a release). This mode plans 10 × D evaluations first and doubles the plan as the run goes on, so it needs no budget chosen per function.
+  * Each AMM run shown is its best of 100 random seeds (`race/replay_exp.py`), ignoring any run that reaches 1e-8 in fewer than 4 evaluations. Every other optimizer ran once (HCMA: its single archived run).
+  * With this selection AMM wins 106 of the 120 races against SLSQP and HCMA, and 86 against all five competitors. It reaches 1e-8 in all 120.
+  * For comparison (`race/tuning/replay/comparison.md`):
+    * The previous version, c46 with its budget tuned per function plus the best of 100 seeds, won 114 and 112.
+    * The anytime mode with one run each wins 49 and 22.
+  * Recording needs the research code on the path: `PYTHONPATH=<research main>/src python race/record.py --only amm --seeds race/tuning/amm_seeds_replay.json` (`race/tuning/amm_race.json` selects the mode).
+  * Earlier settings, kept for reference:
+    * The budget sweep (`race/budget_sweep.py`, `race/sweep_report.py`, `race/tuning/sweep_matrix.md`).
+    * The joint budget and seed search (`race/joint_opt.py`).
+    * One budget for every function (B = 600, chosen on instances 6-15) won 44 and 32 with one run each.
 * **On the landscape.** Each × is one evaluation. The last 10 of each optimizer are shown, fading with age. The ring marks each optimizer's best point so far. It never fades, and it glides to a new point only when a better one is found.
 * **The track.** Each optimizer's best f(x) − f_opt so far, on a log scale from 10 down to the finish line at 10⁻⁸ (COCO's final target).
 * **The finish.** The first to cross wins. When every optimizer on the track has finished, or after 1000 × D = 2000 evaluations, the next function starts.

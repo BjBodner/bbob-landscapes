@@ -1,0 +1,8 @@
+{"f": 3, "k": 1, "single": {"finish": 882, "best": 2.5805206860241015e-09}, "best_of": {"rep": 58, "finish": 242, "best": 8.634174264443573e-09}}
+{"f": 5, "k": 5, "single": {"finish": 7, "best": 0.0}, "best_of": {"rep": 44, "finish": 6, "best": 0.0}}
+{"f": 8, "k": 4, "single": {"finish": 362, "best": 4.1950443119276315e-10}, "best_of": {"rep": 72, "finish": 134, "best": 8.548283858544892e-09}}
+{"f": 11, "k": 3, "single": {"finish": 185, "best": 3.775054935317712e-09}, "best_of": {"rep": 29, "finish": 149, "best": 5.834108307567476e-09}}
+{"f": 14, "k": 2, "single": {"finish": 189, "best": 3.048455710086273e-09}, "best_of": {"rep": 94, "finish": 148, "best": 9.380016763316235e-09}}
+{"f": 17, "k": 1, "single": {"finish": 1025, "best": 2.745377258861481e-09}, "best_of": {"rep": 51, "finish": 214, "best": 5.342929654261752e-09}}
+{"f": 19, "k": 5, "single": {"finish": null, "best": 1.8865958850255993e-05}, "best_of": {"rep": 97, "finish": 137, "best": 1.8198988982476294e-09}}
+{"f": 22, "k": 4, "single": {"finish": 139, "best": 8.540098406228935e-09}, "best_of": {"rep": 96, "finish": 53, "best": 7.627534159837523e-09}}

@@ -11,7 +11,9 @@
      hash      keep #f8-s2 style links in the address bar (default false)
      keys      "global": shortcuts anywhere on the page; "local" (default): only while focus is inside
      autoplay  start playing and advance through the functions (default true; off with reduced motion)
-     start     { f: 1..24, seed: 1..5 }
+     start     { f: 1..24, seed: 1..5 } (default f15, seed 1)
+     loopFrom  after f24 the automatic sequence returns to this function (default 15: the first
+               14 functions finish in a few dozen evaluations, so the loop skips them)
      on        the optimizers shown at first (default AMM, SLSQP and HCMA)
      note      HTML appended to the footer note
      source    URL of the source code, shown as a footer link when given
@@ -282,7 +284,7 @@ function mount(el, o = {}) {
       q("[data-raceline]").innerHTML = `bbob f${r.f}, instance ${r.seed} · budget ${INDEX.budget} = 1000 × D · x<sub>opt</sub> = (${B.coord(r.land.x_opt[0])}, ${B.coord(r.land.x_opt[1])})`;
       q("[data-notice]").hidden = !!stage.state.renderer;
       restart();
-      load((k + 1) % 24, seed).catch(() => {});   // the next race, ahead of time
+      load(nextK(k), seed).catch(() => {});   // the next race, ahead of time
     }).catch(err => {
       if (my !== token) return;
       const n = q("[data-notice]");
@@ -300,7 +302,9 @@ function mount(el, o = {}) {
     tip.hidden = true;
     lastLive = "";
   }
-  function next() { select((state.k + 1) % 24, state.seed); }
+  const loopFrom = (o.loopFrom || 15) - 1;
+  function nextK(k) { return k + 1 >= 24 ? loopFrom : k + 1; }   // f24 wraps to loopFrom
+  function next() { select(nextK(state.k), state.seed); }
 
   /* ---------- controls ---------- */
   function setOn(id, show) {
@@ -589,7 +593,7 @@ function mount(el, o = {}) {
     // the clock in the corner
     const clock = q("[data-clock]");
     const nextIn = state.phase === "hold" && state.playing && o.autoplay !== false
-      ? ` · next: f${(state.k + 1) % 24 + 1} in ${Math.max(0, Math.ceil((state.holdUntil - tnow) / 1000))} s` : "";
+      ? ` · next: f${nextK(state.k) + 1} in ${Math.max(0, Math.ceil((state.holdUntil - tnow) / 1000))} s` : "";
     const text = shown.length
       ? `Evaluation <b>${T}</b> / ${budget}${state.playing ? "" : " · paused"}${nextIn}`
       : "Turn on at least one optimizer to race";
@@ -638,7 +642,7 @@ function mount(el, o = {}) {
     if (ix.runs_note) q("[data-runsnote]").textContent = ix.runs_note;
     drawThumbs();
     drawScale();
-    const s = (o.hash && hashed()) || o.start || { f: 1, seed: 1 };
+    const s = (o.hash && hashed()) || o.start || { f: 15, seed: 1 };
     select(s.f - 1, s.seed, { blend: false, scroll: false });
     if (o.hash) addEventListener("hashchange", () => { const h = hashed(); if (h) select(h.f - 1, h.seed); });
   }).catch(err => {
