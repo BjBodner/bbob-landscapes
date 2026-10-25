@@ -48,7 +48,7 @@
 
 .br-app {
   height: 100%;
-  display: grid; grid-template-columns: 200px minmax(0, 1fr) 292px; gap: 16px;
+  display: grid; grid-template-columns: 196px minmax(0, 1fr) auto; gap: 14px;
   padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
 }
 
@@ -81,10 +81,10 @@
 /* ---- main column ---- */
 .br-main {
   min-width: 0; min-height: 0;
-  display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+  display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 10px; padding-block: 14px 10px;
 }
-.br-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; min-width: 0; }
+.br-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 16px; min-width: 0; }
 .br-titles { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .br-eyebrow { font: 600 11px/1.3 var(--font-ui); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .br-title { margin: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 12px; }
@@ -99,16 +99,28 @@
 .br-pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); flex: none; }
 
 /* ---- the goal ---- */
-.br-goal { flex-basis: 100%; margin: 0; font-size: 13px; color: var(--muted); }
+.br-goal { margin: 0; font-size: 13px; color: var(--muted); }
 .br-goal b { color: var(--ink); font-weight: 650; }
 .br-goal-star { color: var(--pin); }
 
 /* ---- the panel on the right: controls and the race track ---- */
 .br-side {
   min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: 10px;
-  padding-block: 14px 10px; padding-left: 14px; border-left: 1px solid var(--line); overflow-y: auto;
-  scrollbar-width: thin;
+  padding-block: 14px 10px; padding-left: 10px; border-left: 1px solid var(--line);
+  width: 46px; overflow: hidden;
 }
+.br-side[data-open="true"] { width: 276px; overflow-y: auto; scrollbar-width: thin; }
+.br-side-body { display: flex; flex-direction: column; gap: 10px; width: 254px; }
+.br-side[data-open="false"] .br-side-body { display: none; }
+.br-side-toggle {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+  padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--chip);
+  font: 600 12px/1 var(--font-ui); color: var(--ink);
+}
+.br-side-toggle:hover { background: var(--hover); }
+.br-side-toggle svg { width: 14px; height: 14px; fill: currentColor; flex: none; }
+.br-side[data-open="false"] .br-side-toggle { flex-direction: column; padding: 9px 6px; }
+.br-side[data-open="false"] .br-side-label { writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: .04em; }
 .br-sec { display: flex; flex-direction: column; gap: 5px; }
 .br-sec.br-inline { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px; }
 .br-opts { display: flex; flex-wrap: wrap; gap: 5px; }
@@ -142,7 +154,7 @@
 /* ---- the race track: one vertical lane per optimizer, from the start at the top to the finish
    line (10^-8 from the global minimum) at the bottom, on a log scale of f - f_opt ---- */
 .br-vtrack {
-  flex: 1 1 auto; min-height: 240px; display: flex; flex-direction: column; gap: 6px;
+  min-height: 0; display: flex; flex-direction: column; gap: 6px;
   padding: 8px 10px 8px; border-radius: 10px; border: 1px solid var(--line); background: var(--stage);
 }
 .br-vt-title { font: 650 12px/1.25 var(--font-ui); color: var(--ink); }
@@ -159,7 +171,8 @@
   font: 650 10.5px/1 var(--font-ui); color: var(--oc); white-space: nowrap;
   text-shadow: 0 0 2px var(--stage), 0 0 2px var(--stage);
 }
-.br-col[data-row="amm"] .br-col-name { font-size: 14px; font-weight: 800; color: var(--ink); }
+.br-col[data-row="amm"] { flex-grow: 2.1; }
+.br-col[data-row="amm"] .br-col-name { font-size: 12.5px; font-weight: 800; color: var(--ink); }
 .br-col-val {
   height: 16px; flex: none; font: 400 9.5px/16px var(--font-data); color: var(--muted);
   white-space: nowrap; font-variant-numeric: tabular-nums;
@@ -196,6 +209,12 @@
 }
 .br-vt-finish b { color: var(--ink); text-transform: uppercase; letter-spacing: .06em; }
 .br-vt-finish svg { width: 22px; height: 18px; flex: none; color: var(--ink); }
+
+/* ---- the landscape with the race track right beside it ---- */
+.bbob-race { --trackw: calc(100px + var(--lanes, 3) * 46px); }
+.br-stagewrap { min-height: 0; display: flex; justify-content: center; align-items: stretch; gap: 10px; }
+.br-stagewrap .br-view { height: 100%; aspect-ratio: 1.06 / 1; max-width: calc(100% - var(--trackw) - 10px); flex: 0 1 auto; }
+.br-stagewrap .br-vtrack { width: var(--trackw); flex: none; }
 
 /* ---- stage ---- */
 .br-view {
@@ -289,8 +308,7 @@
   border: 1px solid var(--line); background: var(--chip); color: var(--ink);
 }
 
-@media (max-height: 760px) { .br-pills { display: none; } }
-@media (max-width: 1100px) { .br-keys { display: none; } .br-app { grid-template-columns: 170px minmax(0, 1fr) 260px; } }
+@media (max-width: 1100px) { .br-keys { display: none; } .br-app { grid-template-columns: 160px minmax(0, 1fr) auto; } }
 @media (max-width: 760px) {
   .bbob-race, .br-app { height: auto !important; }
   .br-app { grid-template-columns: minmax(0, 1fr); gap: 0; }
@@ -307,9 +325,13 @@
   .br-title .fsym { font-size: 30px; }
   .br-title .fname { font-size: 20px; }
   .br-pills { display: none; }
-  .br-side { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); padding-top: 12px; overflow: visible; }
-  .br-vtrack { min-height: 300px; }
-  .br-view { aspect-ratio: 1 / 1; max-height: 72vh; }
+  .br-side, .br-side[data-open="true"] { width: auto; padding-left: 0; border-left: 0; border-top: 1px solid var(--line); padding-top: 12px; overflow: visible; }
+  .br-side[data-open="false"] .br-side-toggle { flex-direction: row; padding: 6px 10px; }
+  .br-side[data-open="false"] .br-side-label { writing-mode: horizontal-tb; transform: none; }
+  .br-side-body { width: auto; }
+  .br-stagewrap { flex-direction: column; }
+  .br-stagewrap .br-view { width: 100%; height: auto; aspect-ratio: 1 / 1; max-width: none; }
+  .br-stagewrap .br-vtrack { width: 100%; height: 300px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .bbob-race * { animation: none !important; transition: none !important; }

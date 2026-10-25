@@ -12,6 +12,7 @@
      keys      "global": shortcuts anywhere on the page; "local" (default): only while focus is inside
      autoplay  start playing and advance through the functions (default true; off with reduced motion)
      start     { f: 1..24, seed: 1..5 } (default f15, seed 1)
+     controls  "open" to show the controls drawer at first (default closed; the viewer's choice is remembered)
      loopFrom  after f24 the automatic sequence returns to this function (default 15: the first
                14 functions finish in a few dozen evaluations, so the loop skips them)
      on        the optimizers shown at first (default AMM, SLSQP and HCMA)
@@ -28,7 +29,7 @@ const OPTIMIZERS = [
   { id: "nelder_mead", name: "Nelder-Mead", short: "N-M" },
   { id: "ngopt", name: "NGOpt", short: "NGOpt" },
   { id: "cma_bipop", name: "CMA-BIPOP", short: "BIPOP" },
-  { id: "amm", name: "AMM (Ours)", short: "AMM" },
+  { id: "amm", name: "AMM (Ours)", short: "AMM (Ours)" },
 ];
 const DEFAULT_ON = ["amm", "slsqp", "hcma"];
 const TRAIL = 10;                      // samples shown per optimizer
@@ -39,6 +40,7 @@ const LOG_START = 1, LOG_FINISH = -8;  // the track: 10^1 (and above) to the fin
 const RATE0 = 15, RATE1 = 0.12;        // clock: 15 + 0.12 t evaluations per second at 1x
 const SPEEDS = [0.5, 1, 2, 4];
 const DOMAIN = 5;
+const ZOOM_HEAT = 0.89;                // the heat map's camera distance (1 leaves room to turn the surface)
 const ORD = n => n + (n % 10 === 1 && n % 100 !== 11 ? "st" : n % 10 === 2 && n % 100 !== 12 ? "nd" : n % 10 === 3 && n % 100 !== 13 ? "rd" : "th");
 const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
@@ -57,6 +59,7 @@ function mount(el, o = {}) {
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const on = new Set(o.on || DEFAULT_ON);
   el.classList.add("bbob-race");
+  const sideId = "br-side-" + Math.random().toString(36).slice(2, 9);
   el.innerHTML = `
 <div class="br-app">
   <nav class="br-index" data-index aria-label="The 24 bbob functions">
@@ -64,19 +67,30 @@ function mount(el, o = {}) {
   </nav>
   <div class="br-main">
     <header class="br-head">
-      <div class="br-titles">
-        <div class="br-eyebrow" data-eyebrow></div>
-        <h2 class="br-title"><span class="fsym" data-fsym><i>f</i><sub></sub></span><span class="fname" data-fname></span></h2>
-      </div>
-      <ul class="br-pills" data-pills aria-label="Classification"></ul>
+      <h2 class="br-title"><span class="fsym" data-fsym><i>f</i><sub></sub></span><span class="fname" data-fname></span></h2>
       <p class="br-goal"><b>The goal:</b> reach the global minimum <span class="br-goal-star" aria-hidden="true">★</span>. The first optimizer whose best point gets within 10<sup>−8</sup> of it wins.</p>
     </header>
-    <div class="br-view" data-stage>
-      <div class="br-axes" data-axes></div>
-      <div class="br-clock" data-clock aria-hidden="true"></div>
-      <div class="br-tip" data-tip hidden></div>
-      <div class="br-win" data-win hidden></div>
-      <div class="br-notice" data-notice hidden></div>
+    <div class="br-stagewrap">
+      <div class="br-view" data-stage>
+        <div class="br-axes" data-axes></div>
+        <div class="br-clock" data-clock aria-hidden="true"></div>
+        <div class="br-tip" data-tip hidden></div>
+        <div class="br-win" data-win hidden></div>
+        <div class="br-notice" data-notice hidden></div>
+      </div>
+      <div class="br-vtrack" data-track role="group" aria-label="Race track: each optimizer's distance to the global minimum, best f(x) − f_opt so far on a log scale, from 10 at the top to the finish line at 10⁻⁸ at the bottom">
+        <div class="br-vt-title">Distance to the global minimum <span>(best f − f<sub>opt</sub>)</span></div>
+        <div class="br-vt-body">
+          <div class="br-vscale" aria-hidden="true"><div class="sp-top"></div><div class="ticks" data-scale></div><div class="sp-bot"></div></div>
+          ${OPTIMIZERS.map(m => `<div class="br-col" data-row="${m.id}" style="--oc: var(--r-${m.id})" title="${m.name}">
+            <div class="br-col-name">${m.short}</div>
+            <div class="br-col-val val">–</div>
+            <div class="br-col-rail" aria-hidden="true"><div class="br-run"></div></div>
+            <div class="br-col-end"><span class="place" hidden></span><span class="br-lend"></span></div>
+          </div>`).join("")}
+        </div>
+        <div class="br-vt-finish">${FLAG}<span><b>Finish</b>: within 10<sup>−8</sup> of the global minimum</span></div>
+      </div>
     </div>
     <p class="br-sr" data-live aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
     <footer class="br-foot">
@@ -92,7 +106,12 @@ function mount(el, o = {}) {
       ${o.source ? `<span><a href="${o.source}" target="_blank" rel="noopener">Source code and data</a> · functions from <a href="https://github.com/numbbo/coco" target="_blank" rel="noopener">COCO</a></span>` : ""}
     </footer>
   </div>
-  <aside class="br-side" aria-label="Race controls and track">
+  <aside class="br-side" data-side data-open="false" aria-label="Race controls">
+    <button type="button" class="br-side-toggle" data-side-toggle aria-expanded="false" aria-controls="${sideId}" title="Show the controls">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.6 1h2.8l.4 1.9 1.2.7 1.8-.7 1.4 2.4-1.4 1.3v1.4l1.4 1.3-1.4 2.4-1.8-.7-1.2.7-.4 1.9H6.6l-.4-1.9-1.2-.7-1.8.7-1.4-2.4L3.2 8.7V7.3L1.8 6l1.4-2.4 1.8.7 1.2-.7zM8 5.6a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8z"/></svg><span class="br-side-label">Controls</span>
+    </button>
+    <div class="br-side-body" id="${sideId}">
+    <div class="br-sec"><div class="br-eyebrow" data-eyebrow></div><ul class="br-pills" data-pills aria-label="Classification"></ul></div>
     <div class="br-sec" role="group" aria-label="Optimizers in the race"><span class="br-lab">Racers</span><div class="br-opts">${
       OPTIMIZERS.map(m => `<button type="button" class="br-opt" data-o="${m.id}" style="--oc: var(--r-${m.id})" aria-pressed="false"><i aria-hidden="true"></i>${m.name}</button>`).join("")}</div></div>
     <div class="br-sec br-inline" role="group" aria-label="Seed"><span class="br-lab">Seed</span><div class="br-seg" data-seeds>${
@@ -107,18 +126,6 @@ function mount(el, o = {}) {
       <div class="br-seg" role="group" aria-label="Landscape colours"><button type="button" data-cmap="atlas" aria-pressed="true">Atlas</button><button type="button" data-cmap="muted" aria-pressed="false">Muted</button></div>
       <button type="button" class="br-tbtn" data-optimum aria-pressed="true" title="Show the global minimum"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 .8l1.5 3.6 3.7.3-2.8 2.4.9 3.7L6 8.8 2.7 10.8l.9-3.7L.8 4.7l3.7-.3z"/></svg>Goal</button>
     </div>
-    <div class="br-vtrack" data-track role="group" aria-label="Race track: each optimizer's distance to the global minimum, best f(x) − f_opt so far on a log scale, from 10 at the top to the finish line at 10⁻⁸ at the bottom">
-      <div class="br-vt-title">Distance to the global minimum <span>(best f − f<sub>opt</sub>)</span></div>
-      <div class="br-vt-body">
-        <div class="br-vscale" aria-hidden="true"><div class="sp-top"></div><div class="ticks" data-scale></div><div class="sp-bot"></div></div>
-        ${OPTIMIZERS.map(m => `<div class="br-col" data-row="${m.id}" style="--oc: var(--r-${m.id})" title="${m.name}">
-          <div class="br-col-name">${m.short}</div>
-          <div class="br-col-val val">–</div>
-          <div class="br-col-rail" aria-hidden="true"><div class="br-run"></div></div>
-          <div class="br-col-end"><span class="place" hidden></span><span class="br-lend"></span></div>
-        </div>`).join("")}
-      </div>
-      <div class="br-vt-finish">${FLAG}<span><b>Finish</b>: within 10<sup>−8</sup> of the global minimum</span></div>
     </div>
   </aside>
 </div>`;
@@ -227,6 +234,7 @@ function mount(el, o = {}) {
       onLeave: () => { tip.hidden = true; },
     });
     stage.showPin(false);   // the optimum is drawn on the overlay, so it is not confused with a best ring
+    stage.state.zoom = ZOOM_HEAT;   // the top-down map needs no room for turning, so it fills more of the stage
   }
 
   /* ---------- data ---------- */
@@ -314,10 +322,22 @@ function mount(el, o = {}) {
   function next() { select(nextK(state.k), state.seed); }
 
   /* ---------- controls ---------- */
+  const side = q("[data-side]"), sideBtn = q("[data-side-toggle]"), SIDE_KEY = "bbob-race-controls";
+  function setSide(open) {   // the drawer is closed by default; the viewer's choice is remembered
+    side.dataset.open = open;
+    sideBtn.setAttribute("aria-expanded", open);
+    sideBtn.title = open ? "Hide the controls" : "Show the controls";
+    try { localStorage.setItem(SIDE_KEY, open ? "1" : "0"); } catch (e) { /* storage blocked */ }
+  }
+  let sideOpen = o.controls === "open";
+  try { const v = localStorage.getItem(SIDE_KEY); if (v !== null) sideOpen = v === "1"; } catch (e) { /* storage blocked */ }
+  setSide(sideOpen);
+  sideBtn.addEventListener("click", () => setSide(side.dataset.open !== "true"));
   function setOn(id, show) {
     if (show) on.add(id); else on.delete(id);
     q(`[data-o="${id}"]`).setAttribute("aria-pressed", show);
     q(`[data-row="${id}"]`).hidden = !show;
+    el.style.setProperty("--lanes", Math.max(1, on.size));
   }
   OPTIMIZERS.forEach(m => setOn(m.id, on.has(m.id)));
   qa("[data-o]").forEach(b => b.addEventListener("click", () => setOn(b.dataset.o, !on.has(b.dataset.o))));
@@ -341,6 +361,7 @@ function mount(el, o = {}) {
   function setView(v) {
     if (!stage || !stage.setView(v)) return;
     state.view = v;
+    stage.state.zoom = v === "heat" ? ZOOM_HEAT : 1;
     qa("[data-view]").forEach(b => b.setAttribute("aria-pressed", b.dataset.view === v));
     tip.hidden = true;
   }
@@ -469,11 +490,15 @@ function mount(el, o = {}) {
       const overlaps = (x, w, top, hgt) =>
         labels.some(b => x - w / 2 < b.x + b.w / 2 && x + w / 2 > b.x - b.w / 2 && top < b.top + b.h && top + hgt > b.top) ||
         rings.some(c => Math.max(Math.abs(x - c.x) - w / 2, 0) ** 2 + Math.max(top - c.y, c.y - (top + hgt), 0) ** 2 < (c.r + 2) ** 2);
-      function label(text, x, y, size, weight, col, out, dir = -1) {   // dir -1: above y, +1: below y
+      function label(text, x, y, size, weight, col, out, dir = -1, below = null) {   // dir -1: above y, +1: below y
         ctx.font = `${weight} ${size}px ${fontUI}`;
         const w = ctx.measureText(text).width, hgt = size + 2;
         let top = dir < 0 ? y - hgt : y;
         for (let tries = 0; tries < 12 && overlaps(x, w, top, hgt); tries++) top += dir * (hgt / 2 + 1);
+        if (dir < 0 && top < 26 && below !== null) {   // pushed into the clock: put it under the marker
+          top = below;
+          for (let tries = 0; tries < 12 && overlaps(x, w, top, hgt); tries++) top += hgt / 2 + 1;
+        }
         labels.push({ x, w, top, h: hgt });
         ctx.globalAlpha = 1;
         ctx.textAlign = "center"; ctx.textBaseline = "top";
@@ -513,7 +538,7 @@ function mount(el, o = {}) {
         ctx.strokeStyle = outlines[m.id]; ctx.lineWidth = 5; ctx.stroke();
         ctx.strokeStyle = colours[m.id]; ctx.lineWidth = 2.6; ctx.stroke();
         rings.push({ x: px, y: py, r });
-        todo.push([m.short, px, py - r - 3, 10, 650, colours[m.id], outlines[m.id]]);
+        todo.push([m.short, px, py - r - 3, 10, 650, colours[m.id], outlines[m.id], -1, py + r + 3]);
       });
       if (amm) {   // AMM's bull's-eye on top of every ring, and its label placed first
         const [px, py] = at("amm"), c = colours.amm, o = outlines.amm;
@@ -526,7 +551,7 @@ function mount(el, o = {}) {
         ctx.beginPath(); ctx.arc(px, py, 3.4, 0, 2 * Math.PI);
         ctx.fillStyle = c; ctx.fill(); ctx.strokeStyle = o; ctx.lineWidth = 1.5; ctx.stroke();
         rings.push({ x: px, y: py, r: 14 });
-        todo.unshift(["AMM", px, py - 17, 13, 800, c, o]);
+        todo.unshift(["AMM (Ours)", px, py - 17, 13, 800, c, o, -1, py + 17]);
       }
       for (const a of todo) label(...a);
       if (goal) label("global minimum", goal[0], goal[1] + 10, 10.5, 600, colours.pin, colours.stage, 1);
