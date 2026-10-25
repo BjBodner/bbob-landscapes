@@ -12,6 +12,7 @@
      keys      "global": shortcuts anywhere on the page; "local" (default): only while focus is inside
      autoplay  start playing and advance through the functions (default true; off with reduced motion)
      start     { f: 1..24, seed: 1..5 } (default f15, seed 1)
+     confetti  true for confetti with the winner's banner (default false)
      controls  "open" to show the controls drawer at first (default closed; the viewer's choice is remembered)
      loopFrom  after f24 the automatic sequence returns to this function (default 15: the first
                14 functions finish in a few dozen evaluations, so the loop skips them)
@@ -448,7 +449,7 @@ function mount(el, o = {}) {
     win.hidden = false;
     live.textContent = `${kind === "tie" ? "Dead heat: " + ids.map(nameOf).join(" and ") : nameOf(id) + (kind === "photo" ? " is closest at the end" : " wins")} on f${state.k + 1}, seed ${state.seed}.`;
     banner = { t1: setTimeout(() => hideBanner(false), BANNER_MS) };
-    if (!reduceMotion && kind !== "photo") burst(ids.map(i => colours[i]));
+    if (o.confetti && !reduceMotion && kind !== "photo") burst(ids.map(i => colours[i]));
   }
   function burst(cols) {
     const w = view.clientWidth, h = view.clientHeight;

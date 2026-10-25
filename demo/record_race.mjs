@@ -1,6 +1,7 @@
 // Records a short video of the Optimizer Race (race.html) with headless Chrome and ffmpeg.
 //
 //   node demo/record_race.mjs [--from 15] [--count 5] [--speed 2] [--racers amm,slsqp,hcma]
+//                             (the page's own options apply: race.html mounts without confetti)
 //                             [--out demo/out/race-demo.mp4]
 //
 // The page runs on a simulated clock: performance.now, requestAnimationFrame, setTimeout and the
